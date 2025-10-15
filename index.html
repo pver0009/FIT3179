@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Australian Cost of Living & Purchasing Power Analysis</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Australian Cost of Living & Purchasing Power Analysis</h1>
+            <p class="subtitle">Understanding regional cost variations and affordability across Australia</p>
+        </header>
+
+        <section class="intro">
+            <p>This dashboard explores the cost of living pressures facing Australian households, examining regional variations, spending patterns, and affordability across different household types and locations.</p>
+        </section>
+
+        <!-- Weekly Wage Allocation -->
+        <section class="visualization-section">
+            <h2>How the Average Weekly Wage is Allocated</h2>
+            <div class="chart-container">
+                <div id="weekly_wage_allocation"></div>
+                <div class="chart-description">
+                    <p>Based on the average Australian weekly wage of $2,010, housing costs consume the largest share at $452.25 per week (22.5%). Food and transport follow as the next largest expenses, highlighting the pressure of essential living costs on household budgets.</p>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>Data Sources: Australian Bureau of Statistics (ABS) - Consumer Price Index, Average Weekly Earnings, Household Expenditure Survey, Selected Living Cost Indexes</p>
+            <p>Created for FIT3179 Data Visualisation 2 Assignment | Semester 2, 2025</p>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+    <script src="visualisations.js"></script>
+</body>
+</html>
