@@ -1,0 +1,57 @@
+﻿state,category,weekly_spend_2015,weekly_spend_2023,percentage_of_income
+NSW,Current housing costs,298.9,373.63,19.6
+NSW,Food and non-alcoholic beverages,253.15,316.44,16.6
+NSW,Transport,221.13,276.41,14.5
+NSW,Recreation,184.53,230.66,12.1
+NSW,Miscellaneous goods and services,103.7,129.63,6.8
+NSW,Medical care and health expenses,88.45,110.56,5.8
+NSW,Household furnishings and equipment,62.53,78.16,4.1
+VIC,Current housing costs,280.28,350.35,19.6
+VIC,Food and non-alcoholic beverages,237.38,296.73,16.6
+VIC,Transport,207.35,259.19,14.5
+VIC,Recreation,173.03,216.29,12.1
+VIC,Miscellaneous goods and services,97.24,121.55,6.8
+VIC,Medical care and health expenses,82.94,103.68,5.8
+VIC,Household furnishings and equipment,58.61,73.26,4.1
+QLD,Current housing costs,266.36,332.95,19.6
+QLD,Food and non-alcoholic beverages,225.59,282.99,16.6
+QLD,Transport,197.05,246.31,14.5
+QLD,Recreation,164.44,205.55,12.1
+QLD,Miscellaneous goods and services,92.42,115.53,6.8
+QLD,Medical care and health expenses,78.86,98.58,5.8
+QLD,Household furnishings and equipment,55.72,69.65,4.1
+SA,Current housing costs,233.63,292.04,19.6
+SA,Food and non-alcoholic beverages,197.87,247.34,16.6
+SA,Transport,172.87,216.09,14.5
+SA,Recreation,144.28,180.35,12.1
+SA,Miscellaneous goods and services,81.06,101.33,6.8
+SA,Medical care and health expenses,69.14,86.43,5.8
+SA,Household furnishings and equipment,48.87,61.09,4.1
+WA,Current housing costs,280.08,350.1,19.6
+WA,Food and non-alcoholic beverages,237.21,296.51,16.6
+WA,Transport,207.21,259.01,14.5
+WA,Recreation,172.91,216.14,12.1
+WA,Miscellaneous goods and services,97.17,121.46,6.8
+WA,Medical care and health expenses,82.82,103.53,5.8
+WA,Household furnishings and equipment,58.59,73.24,4.1
+TAS,Current housing costs,223.64,279.55,19.6
+TAS,Food and non-alcoholic beverages,189.41,236.76,16.6
+TAS,Transport,165.45,206.81,14.5
+TAS,Recreation,138.06,172.58,12.1
+TAS,Miscellaneous goods and services,77.59,96.99,6.8
+TAS,Medical care and health expenses,66.18,82.73,5.8
+TAS,Household furnishings and equipment,46.78,58.48,4.1
+ACT,Current housing costs,327.32,409.15,19.6
+ACT,Food and non-alcoholic beverages,277.22,346.53,16.6
+ACT,Transport,242.15,302.69,14.5
+ACT,Recreation,202.07,252.59,12.1
+ACT,Miscellaneous goods and services,113.54,141.93,6.8
+ACT,Medical care and health expenses,96.86,121.08,5.8
+ACT,Household furnishings and equipment,68.47,85.59,4.1
+NT,Current housing costs,333.2,416.5,19.6
+NT,Food and non-alcoholic beverages,282.2,352.75,16.6
+NT,Transport,246.5,308.13,14.5
+NT,Recreation,205.7,257.13,12.1
+NT,Miscellaneous goods and services,115.6,144.5,6.8
+NT,Medical care and health expenses,98.6,123.25,5.8
+NT,Household furnishings and equipment,69.7,87.13,4.1
