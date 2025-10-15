@@ -84,8 +84,14 @@ h1 {
     color: #495057;
 }
 
-#weekly_wage_allocation
- {
+#weekly_wage_allocation,
+#cost_of_living_map,
+#inflation_trends,
+#earnings_spending_comparison,
+#living_cost_indexes,
+#spending_composition,
+#cost_pressures,
+#category_inflation {
     width: 100%;
     min-height: 400px;
 }
