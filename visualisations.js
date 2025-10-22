@@ -134,7 +134,8 @@ const weeklyWageAllocation = {
                 "theta": {
                     "field": "weekly_amount",
                     "type": "quantitative",
-                    "title": "Weekly Amount ($)"
+                    "title": "Weekly Amount ($)",
+                    "sort": {"field": "weekly_amount", "order": "ascending"}
                 },
                 "color": {
                     "field": "short_category",
