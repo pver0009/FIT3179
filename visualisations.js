@@ -142,15 +142,15 @@ const weeklyWageAllocation = {
             "title": "Amount Rank",
             "scale": {
                 "range": [
-                    "#03045E", // Dark blue - highest amount
-                    "#023E8A",
-                    "#0077B6",
-                    "#0096C7", 
-                    "#00b4d8",
-                    "#48cae4",
-                    "#90e0ef",
-                    "#ade8f4",
-                    "#e2fdff"  // Light blue - lowest amount
+                    "#001233", // Dark blue - highest amount
+                    "#001845",
+                    "#002855",
+                    "#023e7d", 
+                    "#0353a4",
+                    "#0466c8",
+                    "#33415c",
+                    "#5c677d",
+                    "#7d8597"  // Light blue - lowest amount
                 ],
                 "domain": [1, 2, 3, 4, 5, 6, 7, 8, 9] // Ranks from 1 (highest) to 9 (lowest)
             },
