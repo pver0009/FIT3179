@@ -213,6 +213,7 @@ const inflationTrends = {
     ]
 };
 
+
 // 4. Earnings vs Spending Comparison
 const earningsSpendingComparison = {
     "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
@@ -222,7 +223,11 @@ const earningsSpendingComparison = {
     "data": {"url": "data/earnings_data.csv"},
     "transform": [
         {"filter": "datum.gender == 'person'"},
-        {"filter": "datum.state != 'AUSTRALIA'"}
+        {"filter": "datum.state != 'AUSTRALIA'"},
+        {
+            "calculate": "replace(datum.weekly_earnings, ',', '')",
+            "as": "weekly_earnings_clean"
+        }
     ],
     "layer": [
         {
@@ -235,7 +240,7 @@ const earningsSpendingComparison = {
                     "sort": "-y"
                 },
                 "y": {
-                    "field": "weekly_earnings",
+                    "field": "weekly_earnings_clean",
                     "type": "quantitative",
                     "title": "Weekly Amount ($)",
                     "scale": {"domain": [1700, 2300]}
@@ -245,7 +250,7 @@ const earningsSpendingComparison = {
                 },
                 "tooltip": [
                     {"field": "state", "type": "nominal", "title": "State"},
-                    {"field": "weekly_earnings", "type": "quantitative", "title": "Weekly Earnings", "format": "$.2f"}
+                    {"field": "weekly_earnings_clean", "type": "quantitative", "title": "Weekly Earnings", "format": "$.2f"}
                 ]
             }
         },
@@ -278,11 +283,12 @@ const livingCostIndexes = {
     "width": "container",
     "height": 400,
     "title": "Living Cost Indexes by Household Type",
-    "data": {"url": "data/living_cost_indexes.csv"}, // You'll need to convert the Excel to CSV
+    "data": {"url": "data/living_cost_indexes.csv"},
     "transform": [
         {"fold": ["employee_index", "pensioner_index", "self_funded_index"], "as": ["household_type", "index_value"]},
         {"calculate": "datum.household_type == 'employee_index' ? 'Employee' : datum.household_type == 'pensioner_index' ? 'Pensioner' : 'Self-Funded'", "as": "household_type_label"}
     ],
+    "mark": "line",
     "encoding": {
         "x": {
             "field": "year_quarter",
@@ -290,39 +296,23 @@ const livingCostIndexes = {
             "title": "Year Quarter",
             "axis": {"labelAngle": -45}
         },
+        "y": {
+            "field": "index_value",
+            "type": "quantitative",
+            "title": "Living Cost Index"
+        },
         "color": {
             "field": "household_type_label",
             "type": "nominal",
             "title": "Household Type",
             "scale": {"scheme": "set2"}
-        }
-    },
-    "layer": [
-        {
-            "mark": "line",
-            "encoding": {
-                "y": {
-                    "field": "index_value",
-                    "type": "quantitative",
-                    "title": "Living Cost Index"
-                }
-            }
         },
-        {
-            "mark": {"type": "point", "size": 50},
-            "encoding": {
-                "y": {
-                    "field": "index_value",
-                    "type": "quantitative"
-                },
-                "tooltip": [
-                    {"field": "year_quarter", "type": "temporal", "title": "Quarter"},
-                    {"field": "household_type_label", "type": "nominal", "title": "Household Type"},
-                    {"field": "index_value", "type": "quantitative", "title": "Index Value", "format": ".1f"}
-                ]
-            }
-        }
-    ]
+        "tooltip": [
+            {"field": "year_quarter", "type": "temporal", "title": "Quarter"},
+            {"field": "household_type_label", "type": "nominal", "title": "Household Type"},
+            {"field": "index_value", "type": "quantitative", "title": "Index Value", "format": ".1f"}
+        ]
+    }
 };
 
 // 6. Spending Composition Over Time
@@ -451,7 +441,7 @@ vegaEmbed('#earnings_by_gender', earningsByStateGender)
     console.log("Earnings by gender chart loaded.");
   })
   .catch(console.error);
-  
+
 vegaEmbed("#weekly_wage_allocation", weeklyWageAllocation)
   .then(function(result) {
     // Chart rendered successfully
