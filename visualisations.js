@@ -509,6 +509,7 @@ const costPressures = {
         }
     },
     "transform": [
+        {"calculate": "datum.category || datum['category'] || datum['﻿category']", "as": "category_final"},
         {"fold": ["employee_pressure", "pensioner_pressure", "self_funded_pressure"], "as": ["household_type", "pressure_level"]},
         {"calculate": "datum.household_type == 'employee_pressure' ? 'Employee' : datum.household_type == 'pensioner_pressure' ? 'Pensioner' : 'Self-Funded'", "as": "household_type_label"}
     ],
@@ -528,7 +529,7 @@ const costPressures = {
                     "axis": {"grid": false, "labelAngle": 0}
                 },
                 "y": {
-                    "field": "category",  // Try without cleaning first
+                    "field": "category_final",
                     "type": "nominal",
                     "title": "Spending Category",
                     "sort": "-x",
@@ -568,7 +569,7 @@ const costPressures = {
                     "type": "nominal"
                 },
                 "y": {
-                    "field": "category",  // Try without cleaning first
+                    "field": "category_final",
                     "type": "nominal"
                 },
                 "text": {
@@ -616,7 +617,10 @@ const categoryInflation = {
         "color": {
             "field": "annual_change_percent",
             "type": "quantitative",
-            "scale": {"scheme": "redblue", "domainMid": 0},
+            "scale": {
+                "scheme": "blueorange", 
+                "domainMid": 0
+            },
             "legend": {"title": "Annual Change"}
         },
         "tooltip": [
