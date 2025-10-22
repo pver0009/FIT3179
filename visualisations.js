@@ -574,8 +574,15 @@ const categoryInflation = {
     }
 };
 
-// Embed all visualizations
 
+
+
+// Configuration to remove the actions menu
+const embedOpts = {
+    actions: false
+};
+
+// Embed all visualizations
 vegaEmbed('#earnings_by_gender', earningsByStateGender)
   .then(function(result) {
     console.log("Earnings by gender chart loaded.");
