@@ -13,7 +13,17 @@ const earningsByStateGender = {
             "as": "weekly_earnings_clean"
         },
         {
+            "calculate": "toNumber(datum.weekly_earnings_clean)",
+            "as": "weekly_earnings_numeric"
+        },
+        {
             "filter": "datum.state != 'AUSTRALIA'"
+        },
+        {
+            "filter": {"param": "gender_select"}
+        },
+        {
+            "filter": {"param": "state_select"}
         }
     ],
     "params": [
@@ -33,8 +43,8 @@ const earningsByStateGender = {
             "bind": {
                 "input": "select",
                 "options": ["NSW", "VIC", "QLD", "SA", "WA", "TAS", "NT", "ACT"],
-                "name": "State: ",
-                "select": "checkbox"
+                "name": "States: ",
+                "select": true
             }
         }
     ],
@@ -48,7 +58,7 @@ const earningsByStateGender = {
             "axis": {"labelAngle": 0}
         },
         "y": {
-            "field": "weekly_earnings_clean",
+            "field": "weekly_earnings_numeric",
             "type": "quantitative",
             "title": "Weekly Earnings ($)"
         },
@@ -68,7 +78,7 @@ const earningsByStateGender = {
         "tooltip": [
             {"field": "state", "type": "nominal", "title": "State"},
             {"field": "gender", "type": "nominal", "title": "Gender"},
-            {"field": "weekly_earnings_clean", "type": "quantitative", "title": "Weekly Earnings", "format": "$.2f"}
+            {"field": "weekly_earnings_numeric", "type": "quantitative", "title": "Weekly Earnings", "format": "$.2f"}
         ]
     },
     "config": {
@@ -83,7 +93,7 @@ const earningsByStateGender = {
     }
 };
 
-// 1. Weekly Wage Allocation Pie Chart
+// 2. Weekly Wage Allocation Pie Chart
 const weeklyWageAllocation = {
     "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
     "width": "container",
@@ -121,7 +131,7 @@ const weeklyWageAllocation = {
     "view": {"stroke": null}
 };
 
-// 2. Simplified Cost of Living Map (without TopoJSON)
+// 3. Simplified Cost of Living Map (without TopoJSON)
 const costOfLivingMap = {
     "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
     "width": "container",
@@ -168,16 +178,22 @@ const costOfLivingMap = {
     "config": {"view": {"stroke": null}}
 };
 
-// 3. Inflation Trends
+// 4. Inflation Trends
 const inflationTrends = {
     "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
     "width": "container",
     "height": 400,
     "data": {"url": "data/inflation_data.csv"},
     "title": "Inflation Trends Over Time",
+    "transform": [
+        {
+            "calculate": "datum.year_quarter + '-01'",
+            "as": "parsed_date"
+        }
+    ],
     "encoding": {
         "x": {
-            "field": "year_quarter",
+            "field": "parsed_date",
             "type": "temporal",
             "title": "Year Quarter",
             "axis": {"labelAngle": -45}
@@ -194,9 +210,9 @@ const inflationTrends = {
                     "scale": {"domain": [-2, 10]}
                 },
                 "tooltip": [
-                    {"field": "year_quarter", "type": "temporal", "title": "Quarter"},
-                    {"field": "all_groups_cpi", "type": "quantitative", "title": "CPI Inflation", "format": ".1%"},
-                    {"field": "trimmed_mean", "type": "quantitative", "title": "Trimmed Mean", "format": ".1%"}
+                    {"field": "year_quarter", "type": "nominal", "title": "Quarter"},
+                    {"field": "all_groups_cpi", "type": "quantitative", "title": "CPI Inflation", "format": ".1f"},
+                    {"field": "trimmed_mean", "type": "quantitative", "title": "Trimmed Mean", "format": ".1f"}
                 ]
             }
         },
@@ -207,14 +223,17 @@ const inflationTrends = {
                     "field": "trimmed_mean",
                     "type": "quantitative",
                     "title": "Inflation Rate (%)"
-                }
+                },
+                "tooltip": [
+                    {"field": "year_quarter", "type": "nominal", "title": "Quarter"},
+                    {"field": "trimmed_mean", "type": "quantitative", "title": "Trimmed Mean", "format": ".1f"}
+                ]
             }
         }
     ]
 };
 
-
-// 4. Earnings vs Spending Comparison
+// 5. Earnings vs Spending Comparison
 const earningsSpendingComparison = {
     "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
     "width": "container",
@@ -227,6 +246,10 @@ const earningsSpendingComparison = {
         {
             "calculate": "replace(datum.weekly_earnings, ',', '')",
             "as": "weekly_earnings_clean"
+        },
+        {
+            "calculate": "toNumber(datum.weekly_earnings_clean)",
+            "as": "weekly_earnings_numeric"
         }
     ],
     "layer": [
@@ -240,7 +263,7 @@ const earningsSpendingComparison = {
                     "sort": "-y"
                 },
                 "y": {
-                    "field": "weekly_earnings_clean",
+                    "field": "weekly_earnings_numeric",
                     "type": "quantitative",
                     "title": "Weekly Amount ($)",
                     "scale": {"domain": [1700, 2300]}
@@ -250,7 +273,7 @@ const earningsSpendingComparison = {
                 },
                 "tooltip": [
                     {"field": "state", "type": "nominal", "title": "State"},
-                    {"field": "weekly_earnings_clean", "type": "quantitative", "title": "Weekly Earnings", "format": "$.2f"}
+                    {"field": "weekly_earnings_numeric", "type": "quantitative", "title": "Weekly Earnings", "format": "$.2f"}
                 ]
             }
         },
@@ -258,7 +281,14 @@ const earningsSpendingComparison = {
             "data": {"url": "data/state_total_spending.csv"},
             "transform": [
                 {"filter": "datum.state != 'AUSTRALIA'"},
-                {"calculate": "datum.spending_2023_adj / 4", "as": "weekly_spending"}
+                {
+                    "calculate": "replace(datum.spending_2023_adj, ',', '')",
+                    "as": "spending_clean"
+                },
+                {
+                    "calculate": "toNumber(datum.spending_clean) / 4",
+                    "as": "weekly_spending"
+                }
             ],
             "mark": {"type": "point", "filled": true, "size": 100, "color": "#e74c3c"},
             "encoding": {
@@ -277,7 +307,7 @@ const earningsSpendingComparison = {
     ]
 };
 
-// 5. Living Cost Indexes (using CSV instead of Excel)
+// 6. Living Cost Indexes (using CSV instead of Excel)
 const livingCostIndexes = {
     "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
     "width": "container",
@@ -286,12 +316,16 @@ const livingCostIndexes = {
     "data": {"url": "data/living_cost_indexes.csv"},
     "transform": [
         {"fold": ["employee_index", "pensioner_index", "self_funded_index"], "as": ["household_type", "index_value"]},
-        {"calculate": "datum.household_type == 'employee_index' ? 'Employee' : datum.household_type == 'pensioner_index' ? 'Pensioner' : 'Self-Funded'", "as": "household_type_label"}
+        {"calculate": "datum.household_type == 'employee_index' ? 'Employee' : datum.household_type == 'pensioner_index' ? 'Pensioner' : 'Self-Funded'", "as": "household_type_label"},
+        {
+            "calculate": "datum.year_quarter + '-01'",
+            "as": "parsed_date"
+        }
     ],
     "mark": "line",
     "encoding": {
         "x": {
-            "field": "year_quarter",
+            "field": "parsed_date",
             "type": "temporal",
             "title": "Year Quarter",
             "axis": {"labelAngle": -45}
@@ -308,14 +342,14 @@ const livingCostIndexes = {
             "scale": {"scheme": "set2"}
         },
         "tooltip": [
-            {"field": "year_quarter", "type": "temporal", "title": "Quarter"},
+            {"field": "year_quarter", "type": "nominal", "title": "Quarter"},
             {"field": "household_type_label", "type": "nominal", "title": "Household Type"},
             {"field": "index_value", "type": "quantitative", "title": "Index Value", "format": ".1f"}
         ]
     }
 };
 
-// 6. Spending Composition Over Time
+// 7. Spending Composition Over Time
 const spendingComposition = {
     "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
     "width": "container",
@@ -354,7 +388,7 @@ const spendingComposition = {
     }
 };
 
-// 7. Cost Pressures Heatmap (using CSV instead of Excel)
+// 8. Cost Pressures Heatmap (using CSV instead of Excel)
 const costPressures = {
     "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
     "width": "container",
@@ -395,7 +429,7 @@ const costPressures = {
     }
 };
 
-// 8. Category Inflation Bar Chart
+// 9. Category Inflation Bar Chart
 const categoryInflation = {
     "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
     "width": "container",
