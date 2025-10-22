@@ -156,7 +156,7 @@ const weeklyWageAllocation = {
                             "#7d8597",
                             "#5c677d",
                             "#33415c",
-                            "#"  // Light blue - largest amount
+                            "#343a40"  // Light blue - largest amount
                         ]
                     },
                     "sort": {"field": "weekly_amount", "order": "ascending"},
