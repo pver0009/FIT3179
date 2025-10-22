@@ -1,5 +1,88 @@
 // Australian Cost of Living Visualisations
 
+// 1. Earnings by State and Gender Bar Chart with Filters
+const earningsByStateGender = {
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "width": "container",
+    "height": 400,
+    "title": "Weekly Earnings by State and Gender",
+    "data": {"url": "data/earnings_data.csv"},
+    "transform": [
+        {
+            "calculate": "replace(datum.weekly_earnings, ',', '')",
+            "as": "weekly_earnings_clean"
+        },
+        {
+            "filter": "datum.state != 'AUSTRALIA'"
+        }
+    ],
+    "params": [
+        {
+            "name": "gender_select",
+            "value": "person",
+            "bind": {
+                "input": "select",
+                "options": ["person", "male", "female"],
+                "labels": ["All Persons", "Males", "Females"],
+                "name": "Gender: "
+            }
+        },
+        {
+            "name": "state_select",
+            "value": ["NSW", "VIC", "QLD", "SA", "WA", "TAS", "NT", "ACT"],
+            "bind": {
+                "input": "select",
+                "options": ["NSW", "VIC", "QLD", "SA", "WA", "TAS", "NT", "ACT"],
+                "name": "State: ",
+                "select": "checkbox"
+            }
+        }
+    ],
+    "mark": "bar",
+    "encoding": {
+        "x": {
+            "field": "state",
+            "type": "nominal",
+            "title": "State/Territory",
+            "sort": "-y",
+            "axis": {"labelAngle": 0}
+        },
+        "y": {
+            "field": "weekly_earnings_clean",
+            "type": "quantitative",
+            "title": "Weekly Earnings ($)"
+        },
+        "color": {
+            "field": "gender",
+            "type": "nominal",
+            "title": "Gender",
+            "scale": {
+                "domain": ["person", "male", "female"],
+                "range": ["#3498db", "#2ecc71", "#e74c3c"]
+            },
+            "legend": {
+                "title": "Gender",
+                "symbolType": "circle"
+            }
+        },
+        "tooltip": [
+            {"field": "state", "type": "nominal", "title": "State"},
+            {"field": "gender", "type": "nominal", "title": "Gender"},
+            {"field": "weekly_earnings_clean", "type": "quantitative", "title": "Weekly Earnings", "format": "$.2f"}
+        ]
+    },
+    "config": {
+        "axis": {
+            "labelFontSize": 12,
+            "titleFontSize": 14
+        },
+        "legend": {
+            "labelFontSize": 12,
+            "titleFontSize": 14
+        }
+    }
+};
+
 // 1. Weekly Wage Allocation Pie Chart
 const weeklyWageAllocation = {
     "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
