@@ -506,6 +506,73 @@ const costPressures = {
         {"fold": ["employee_pressure", "pensioner_pressure", "self_funded_pressure"], "as": ["household_type", "pressure_level"]},
         {"calculate": "datum.household_type == 'employee_pressure' ? 'Employee' : datum.household_type == 'pensioner_pressure' ? 'Pensioner' : 'Self-Funded'", "as": "household_type_label"}
     ],
+    "layer": [
+        {
+            "mark": {
+                "type": "rect",
+                "stroke": "black",
+                "strokeWidth": 1,
+                "cursor": "pointer"
+            },
+            "encoding": {
+                "x": {
+                    "field": "household_type_label",
+                    "type": "nominal",
+                    "title": "Household Type",
+                    "axis": {"grid": false, "labelAngle": 0}
+                },
+                "y": {
+                    "field": "category",
+                    "type": "nominal",
+                    "title": "Spending Category",
+                    "sort": "-x",
+                    "axis": {"grid": false}
+                },
+                "color": {
+                    "field": "pressure_level",
+                    "type": "nominal",
+                    "title": "Pressure Level",
+                    "scale": {
+                        "domain": ["Low", "Medium", "High", "Very High"],
+                        "range": ["#D2B7E5", "#B185DB", "#815AC0", "#6247AA"]
+                    },
+                    "legend": {
+                        "title": "Pressure Level",
+                        "orient": "top",
+                        "direction": "horizontal",
+                        "gradientLength": 300,
+                        "labelFontSize": 12,
+                        "titleFontSize": 14,
+                        "symbolSize": 100
+                    }
+                }
+            }
+        },
+        {
+            "mark": {
+                "type": "text",
+                "align": "center",
+                "baseline": "middle",
+                "fontSize": 11,
+                "fontWeight": "bold",
+                "color": "black"
+            },
+            "encoding": {
+                "x": {
+                    "field": "household_type_label",
+                    "type": "nominal"
+                },
+                "y": {
+                    "field": "category",
+                    "type": "nominal"
+                },
+                "text": {
+                    "field": "pressure_level",
+                    "type": "nominal"
+                }
+            }
+        }
+    ],
     "config": {
         "view": {"stroke": "transparent"},
         "axis": {
@@ -514,55 +581,6 @@ const costPressures = {
             "titleFont": "Arial, sans-serif",
             "titleFontSize": 14
         }
-    },
-    "mark": {
-        "type": "rect",
-        "stroke": "black",
-        "strokeWidth": 1,
-        "cursor": "pointer"
-    },
-    "encoding": {
-        "x": {
-            "field": "household_type_label",
-            "type": "nominal",
-            "title": "Household Type",
-            "axis": {"grid": false, "labelAngle": 0}
-        },
-        "y": {
-            "field": "category",
-            "type": "nominal",
-            "title": "Spending Category",
-            "sort": "-x",
-            "axis": {"grid": false}
-        },
-        "color": {
-            "field": "pressure_level",
-            "type": "nominal",
-            "title": "Pressure Level",
-            "scale": {
-                "domain": ["Low", "Medium", "High", "Very High"],
-                "range": ["#D2B7E5", "#B185DB", "#815AC0", "#6247AA"]
-            },
-            "legend": {
-                "title": "Pressure Level",
-                "orient": "top",
-                "direction": "horizontal",
-                "gradientLength": 300,
-                "labelFontSize": 12,
-                "titleFontSize": 14,
-                "symbolSize": 100
-            }
-        },
-        "text": {
-            "field": "pressure_level",
-            "type": "nominal"
-        },
-        "tooltip": [
-            {"field": "category", "type": "nominal", "title": "Category"},
-            {"field": "household_type_label", "type": "nominal", "title": "Household Type"},
-            {"field": "pressure_level", "type": "nominal", "title": "Pressure Level"},
-            {"field": "primary_driver", "type": "nominal", "title": "Primary Driver"}
-        ]
     }
 };
 
