@@ -614,22 +614,23 @@ const categoryInflation = {
             "field": "annual_change_percent",
             "type": "quantitative",
             "scale": {
-                "range": ["#1f77b4", "#ffffff", "#ff7f0e"], // Blue -> White -> Orange
+                "range": ["#1f77b4", "#ffffff", "#ff7f0e"],
                 "domainMid": 0
             },
             "legend": {
                 "title": "Annual Change (%)",
-                "format": ".1%", // Add percentage formatting to legend
                 "orient": "top",
                 "direction": "horizontal",
                 "gradientLength": 300,
-                "labelOverlap": true
+                "format": ".1%",
+                "values": [-0.02, -0.01, 0, 0.01, 0.02, 0.03, 0.04, 0.05, 0.06],
+                "labelExpr": "format(datum.value, '.1%')"
             }
         },
         "tooltip": [
             {"field": "category", "type": "nominal", "title": "Category"},
             {"field": "annual_change_percent", "type": "quantitative", "title": "Annual Change", "format": ".1%"},
-            {"field": "quarterly_change", "type": "quantitative", "title": "Quarterly Change", "format": ".1%"},
+            {"field": "quarterly_change", "type": "quantitative", "title": "Quarterly Change", "format": ".1f"},
             {"field": "weight", "type": "quantitative", "title": "Weight in CPI", "format": ".1f"}
         ]
     }
