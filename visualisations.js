@@ -270,11 +270,10 @@ const inflationTrends = {
         "url": "data/inflation_data.csv",
         "format": {
             "type": "dsv",
-            "delimiter": "\t"  // Specify tab delimiter
+            "delimiter": "\t"  
         }
     },
     "transform": [
-        // Convert quarter strings to proper dates
         {
             "calculate": "replace(datum.year_quarter, '-Q', '-')",
             "as": "quarter_clean"
@@ -503,7 +502,6 @@ const costPressures = {
     "title": "Cost Pressures by Category and Household Type",
     "data": {
         "url": "data/cost_pressures.csv"
-        // Remove the format specification since we're using proper CSV now
     },
     "transform": [
         {"fold": ["employee_pressure", "pensioner_pressure", "self_funded_pressure"], "as": ["household_type", "pressure_level"]},
