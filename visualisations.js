@@ -125,62 +125,85 @@ const weeklyWageAllocation = {
     "transform": [
         {"filter": "datum.percentage_2023_est > 0"},
         {"calculate": "datum.percentage_2023_est / 100 * 2010", "as": "weekly_amount"},
-        {"calculate": "datum.category == 'Current housing costs' ? 'Housing' : datum.category", "as": "short_category"},
-        // Create a sorted list of categories by amount
-        {"window": [{"op": "rank", "as": "rank"}], "sort": [{"field": "weekly_amount", "order": "descending"}]}
+        {"calculate": "datum.category == 'Current housing costs' ? 'Housing' : datum.category", "as": "short_category"}
     ],
-    "mark": {"type": "arc", "innerRadius": 50, "tooltip": true},
-    "encoding": {
-        "theta": {
-            "field": "weekly_amount",
-            "type": "quantitative",
-            "title": "Weekly Amount ($)"
-        },
-        "color": {
-            "field": "rank",
-            "type": "quantitative",
-            "title": "Amount Rank",
-            "scale": {
-                "range": [
-                    "#001233", // Dark blue - highest amount
-                    "#001845",
-                    "#002855",
-                    "#023e7d", 
-                    "#0353a4",
-                    "#0466c8",
-                    "#33415c",
-                    "#5c677d",
-                    "#7d8597"  // Light blue - lowest amount
-                ],
-                "domain": [1, 2, 3, 4, 5, 6, 7, 8, 9] // Ranks from 1 (highest) to 9 (lowest)
-            },
-            "legend": {
-                "orient": "right",
-                "title": "Spending Categories",
-                "labelLimit": 180,
-                "columns": 1,
-                "labelFontSize": 11,
-                "titleFontSize": 12,
-                "symbolSize": 120
+    "layer": [
+        {
+            "mark": {"type": "arc", "innerRadius": 100, "tooltip": true},
+            "encoding": {
+                "theta": {
+                    "field": "weekly_amount",
+                    "type": "quantitative",
+                    "title": "Weekly Amount ($)"
+                },
+                "color": {
+                    "field": "short_category",
+                    "type": "nominal",
+                    "title": "Spending Categories",
+                    "scale": {
+                        "range": [
+                            "#001233", // Dark blue - highest amount
+                            "#001845",
+                            "#002855",
+                            "#023e7d", 
+                            "#0353a4",
+                            "#0466c8",
+                            "#33415c",
+                            "#5c677d",
+                            "#7d8597",
+                            "#979dac",
+                            "#b6bccd",
+                            "#d5d9e6",
+                            "#e9ecf5",
+                            "#f3f4f8"
+                        ]
+                    },
+                    "sort": {"field": "weekly_amount", "order": "descending"},
+                    "legend": {
+                        "orient": "right",
+                        "title": "Spending Categories",
+                        "labelLimit": 150,
+                        "columns": 1,
+                        "labelFontSize": 11,
+                        "titleFontSize": 12,
+                        "symbolSize": 100,
+                        "symbolType": "circle"
+                    }
+                },
+                "tooltip": [
+                    {"field": "short_category", "type": "nominal", "title": "Category"},
+                    {"field": "weekly_amount", "type": "quantitative", "title": "Weekly Amount", "format": "$.2f"},
+                    {"field": "percentage_2023_est", "type": "quantitative", "title": "Percentage", "format": ".1%"}
+                ]
             }
         },
-        "tooltip": [
-            {"field": "short_category", "type": "nominal", "title": "Category"},
-            {"field": "weekly_amount", "type": "quantitative", "title": "Weekly Amount", "format": "$.2f"},
-            {"field": "percentage_2023_est", "type": "quantitative", "title": "Percentage", "format": ".1%"}
-        ]
-    },
+        {
             "mark": {
                 "type": "text",
                 "align": "center",
                 "baseline": "middle",
-                "fontSize": 16,
+                "fontSize": 20,
                 "fontWeight": "bold",
                 "color": "#2c3e50"
             },
             "encoding": {
-                "text": {"value": "Total Weekly\nSpending\n$2,010.00"}
+                "text": {"value": "$2,010.00"}
+            }
+        },
+        {
+            "mark": {
+                "type": "text",
+                "align": "center",
+                "baseline": "middle",
+                "fontSize": 14,
+                "color": "#6c757d",
+                "dy": 25
             },
+            "encoding": {
+                "text": {"value": "Total Weekly Spending"}
+            }
+        }
+    ],
     "view": {"stroke": null}
 };
 
@@ -385,7 +408,7 @@ const earningsSpendingComparison = {
     ]
 };
 
-// 6. Living Cost Indexes (using CSV instead of Excel)
+// 6. Living Cost Indexes 
 const livingCostIndexes = {
     "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
     "width": "container",
@@ -466,7 +489,7 @@ const spendingComposition = {
     }
 };
 
-// 8. Cost Pressures Heatmap (using CSV instead of Excel)
+// 8. Cost Pressures Heatmap 
 const costPressures = {
     "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
     "width": "container",
