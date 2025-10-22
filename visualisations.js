@@ -618,7 +618,7 @@ const categoryInflation = {
             "field": "annual_change_percent",
             "type": "quantitative",
             "scale": {
-                "scheme": "blueorange", 
+                "range": ["#1f77b4", "#ffffff", "#ff7f0e"], // Blue -> White -> Orange
                 "domainMid": 0
             },
             "legend": {"title": "Annual Change"}
