@@ -32,18 +32,21 @@ body {
 header {
     text-align: center;
     margin-bottom: 40px;
-    padding-bottom: 20px;
-    border-bottom: 2px solid #e9ecef;
+    padding: 30px 20px;
+    border-radius: 8px;
+    background: #2c3e50; /* Same as chart section headers */
+    color: white;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
 h1 {
-    color: #2c3e50;
+    color: white; /* Changed to white to match header background */
     font-size: 2.5rem;
     margin-bottom: 10px;
 }
 
 .subtitle {
-    color: #6c757d;
+    color: #e0e0e0; /* Lighter color for better contrast on dark background */
     font-size: 1.2rem;
     font-weight: 300;
 }
@@ -147,6 +150,10 @@ footer p {
     
     .chart-container {
         padding: 20px;
+    }
+    
+    header {
+        padding: 20px 15px;
     }
 }
 
