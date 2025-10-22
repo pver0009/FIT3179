@@ -501,7 +501,13 @@ const costPressures = {
     "width": "container",
     "height": 400,
     "title": "Cost Pressures by Category and Household Type",
-    "data": {"url": "data/cost_pressures.csv"},
+    "data": {
+        "url": "data/cost_pressures.csv",
+        "format": {
+            "type": "dsv",
+            "delimiter": "\t"
+        }
+    },
     "transform": [
         {"fold": ["employee_pressure", "pensioner_pressure", "self_funded_pressure"], "as": ["household_type", "pressure_level"]},
         {"calculate": "datum.household_type == 'employee_pressure' ? 'Employee' : datum.household_type == 'pensioner_pressure' ? 'Pensioner' : 'Self-Funded'", "as": "household_type_label"}
@@ -540,7 +546,6 @@ const costPressures = {
                         "title": "Pressure Level",
                         "orient": "top",
                         "direction": "horizontal",
-                        "gradientLength": 300,
                         "labelFontSize": 12,
                         "titleFontSize": 14,
                         "symbolSize": 100
