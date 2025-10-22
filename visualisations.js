@@ -510,7 +510,7 @@ const costPressures = {
     },
     "transform": [
         // Clean the field names to remove BOM characters
-        {"calculate": "trim(datum['﻿category'])", "as": "category_clean"},
+        {"calculate": "trim(datum['category'])", "as": "category_clean"},
         {"fold": ["employee_pressure", "pensioner_pressure", "self_funded_pressure"], "as": ["household_type", "pressure_level"]},
         {"calculate": "datum.household_type == 'employee_pressure' ? 'Employee' : datum.household_type == 'pensioner_pressure' ? 'Pensioner' : 'Self-Funded'", "as": "household_type_label"}
     ],
