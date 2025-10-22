@@ -445,6 +445,13 @@ const categoryInflation = {
 };
 
 // Embed all visualizations
+
+vegaEmbed('#earnings_by_gender', earningsByStateGender)
+  .then(function(result) {
+    console.log("Earnings by gender chart loaded.");
+  })
+  .catch(console.error);
+  
 vegaEmbed("#weekly_wage_allocation", weeklyWageAllocation)
   .then(function(result) {
     // Chart rendered successfully
@@ -452,12 +459,58 @@ vegaEmbed("#weekly_wage_allocation", weeklyWageAllocation)
   })
   .catch(console.error);
   
-vegaEmbed('#cost_of_living_map', costOfLivingMap);
-vegaEmbed('#inflation_trends', inflationTrends);
-vegaEmbed('#earnings_spending_comparison', earningsSpendingComparison);
-vegaEmbed('#living_cost_indexes', livingCostIndexes);
-vegaEmbed('#spending_composition', spendingComposition);
-vegaEmbed('#cost_pressures', costPressures);
-vegaEmbed('#category_inflation', categoryInflation);
+vegaEmbed('#earnings_by_gender', earningsByStateGender)
+  .then(function(result) {
+    console.log("Earnings by gender chart loaded.");
+  })
+  .catch(console.error);
+vegaEmbed("#weekly_wage_allocation", weeklyWageAllocation)
+  .then(function(result) {
+    console.log("Weekly wage allocation chart loaded.");
+  })
+  .catch(console.error);
+  
+vegaEmbed('#cost_of_living_map', costOfLivingMap)
+  .then(function(result) {
+    console.log("Cost of living map loaded.");
+  })
+  .catch(console.error);
+
+vegaEmbed('#inflation_trends', inflationTrends)
+  .then(function(result) {
+    console.log("Inflation trends chart loaded.");
+  })
+  .catch(console.error);
+
+vegaEmbed('#earnings_spending_comparison', earningsSpendingComparison)
+  .then(function(result) {
+    console.log("Earnings vs spending chart loaded.");
+  })
+  .catch(console.error);
+
+vegaEmbed('#living_cost_indexes', livingCostIndexes)
+  .then(function(result) {
+    console.log("Living cost indexes chart loaded.");
+  })
+  .catch(console.error);
+
+vegaEmbed('#spending_composition', spendingComposition)
+  .then(function(result) {
+    console.log("Spending composition chart loaded.");
+  })
+  .catch(console.error);
+
+vegaEmbed('#cost_pressures', costPressures)
+  .then(function(result) {
+    console.log("Cost pressures chart loaded.");
+  })
+  .catch(console.error);
+
+vegaEmbed('#category_inflation', categoryInflation)
+  .then(function(result) {
+    console.log("Category inflation chart loaded.");
+  })
+  .catch(console.error);
+
 
 console.log("All visualizations loaded successfully!");
