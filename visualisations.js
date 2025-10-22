@@ -194,26 +194,40 @@ const inflationTrends = {
     "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
     "width": "container",
     "height": 400,
-    "data": {"url": "data/inflation_data.csv"},
     "title": "Inflation Trends Over Time",
-    "transform": [
-        {
-            "calculate": "datum.year_quarter + '-01'",
-            "as": "parsed_date"
-        }
-    ],
-    "encoding": {
-        "x": {
-            "field": "parsed_date",
-            "type": "temporal",
-            "title": "Year Quarter",
-            "axis": {"labelAngle": -45}
+    "data": {
+        "url": "data/inflation_data.csv",
+        "format": {
+            "type": "dsv",
+            "delimiter": "\t"  // Specify tab delimiter
         }
     },
+    "transform": [
+        // Convert quarter strings to proper dates
+        {
+            "calculate": "replace(datum.year_quarter, '-Q', '-')",
+            "as": "quarter_clean"
+        },
+        {
+            "calculate": "datetime(year(datum.quarter_clean), (quarter(datum.quarter_clean)-1)*3 + 1, 1)",
+            "as": "date"
+        }
+    ],
     "layer": [
         {
-            "mark": {"type": "line", "stroke": "#e74c3c", "strokeWidth": 3},
+            "mark": {
+                "type": "line", 
+                "stroke": "#e74c3c", 
+                "strokeWidth": 3,
+                "point": true
+            },
             "encoding": {
+                "x": {
+                    "field": "date",
+                    "type": "temporal",
+                    "title": "Year Quarter",
+                    "axis": {"labelAngle": -45}
+                },
                 "y": {
                     "field": "all_groups_cpi",
                     "type": "quantitative",
@@ -228,8 +242,19 @@ const inflationTrends = {
             }
         },
         {
-            "mark": {"type": "line", "stroke": "#3498db", "strokeWidth": 2, "strokeDash": [5, 5]},
+            "mark": {
+                "type": "line", 
+                "stroke": "#3498db", 
+                "strokeWidth": 2, 
+                "strokeDash": [5, 5],
+                "point": true
+            },
             "encoding": {
+                "x": {
+                    "field": "date",
+                    "type": "temporal",
+                    "title": "Year Quarter"
+                },
                 "y": {
                     "field": "trimmed_mean",
                     "type": "quantitative",
