@@ -170,6 +170,17 @@ const weeklyWageAllocation = {
             {"field": "percentage_2023_est", "type": "quantitative", "title": "Percentage", "format": ".1%"}
         ]
     },
+            "mark": {
+                "type": "text",
+                "align": "center",
+                "baseline": "middle",
+                "fontSize": 16,
+                "fontWeight": "bold",
+                "color": "#2c3e50"
+            },
+            "encoding": {
+                "text": {"value": "Total Weekly\nSpending\n$2,010.00"}
+            },
     "view": {"stroke": null}
 };
 
