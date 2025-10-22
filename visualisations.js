@@ -6,7 +6,13 @@ const earningsByStateGender = {
     "width": "container",
     "height": 400,
     "title": "Weekly Earnings by State and Gender",
-    "data": {"url": "data/earnings_data.csv"},
+    "data": {
+        "url": "data/earnings_data.csv",
+        "format": {
+            "type": "dsv",
+            "delimiter": "\t"
+        }
+    },
     "transform": [
         {
             "calculate": "replace(datum.weekly_earnings, ',', '')",
@@ -18,24 +24,18 @@ const earningsByStateGender = {
         },
         {
             "filter": "datum.state != 'AUSTRALIA'"
-        },
-        // Fixed filter logic - compare field values with parameter values
-        {
-            "filter": {"field": "gender", "equal": {"expr": "gender_select"}}
-        },
-        {
-            "filter": {"field": "state", "oneOf": {"expr": "state_select"}}
         }
     ],
     "params": [
         {
             "name": "gender_select",
-            "value": "person",
+            "value": ["person", "male", "female"],
             "bind": {
                 "input": "select",
                 "options": ["person", "male", "female"],
                 "labels": ["All Persons", "Males", "Females"],
-                "name": "Gender: "
+                "name": "Gender: ",
+                "select": true
             }
         },
         {
@@ -49,6 +49,25 @@ const earningsByStateGender = {
             }
         }
     ],
+    "transform": [
+        {
+            "calculate": "replace(datum.weekly_earnings, ',', '')",
+            "as": "weekly_earnings_clean"
+        },
+        {
+            "calculate": "toNumber(datum.weekly_earnings_clean)",
+            "as": "weekly_earnings_numeric"
+        },
+        {
+            "filter": "datum.state != 'AUSTRALIA'"
+        },
+        {
+            "filter": {"param": "gender_select"}
+        },
+        {
+            "filter": {"param": "state_select"}
+        }
+    ],
     "mark": "bar",
     "encoding": {
         "x": {
@@ -56,8 +75,7 @@ const earningsByStateGender = {
             "type": "nominal",
             "title": "State/Territory",
             "axis": {"labelAngle": 0},
-            // Remove stacking by using offset
-            "scale": {"padding": 0.2}
+            "sort": "-y"
         },
         "y": {
             "field": "weekly_earnings_numeric",
@@ -71,19 +89,12 @@ const earningsByStateGender = {
             "scale": {
                 "domain": ["person", "male", "female"],
                 "range": ["#3498db", "#2ecc71", "#e74c3c"]
-            },
-            "legend": {
-                "title": "Gender",
-                "symbolType": "circle"
             }
         },
-        // Add column encoding to separate bars by gender
-        "column": {
+        // Use xOffset for side-by-side bars instead of column
+        "xOffset": {
             "field": "gender",
-            "type": "nominal",
-            "title": "Gender",
-            "header": {"title": ""},
-            "spacing": 10
+            "type": "nominal"
         },
         "tooltip": [
             {"field": "state", "type": "nominal", "title": "State"},
