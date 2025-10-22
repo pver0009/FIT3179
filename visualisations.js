@@ -126,8 +126,8 @@ const weeklyWageAllocation = {
         {"filter": "datum.percentage_2023_est > 0"},
         {"calculate": "datum.percentage_2023_est / 100 * 2010", "as": "weekly_amount"},
         {"calculate": "datum.category == 'Current housing costs' ? 'Housing' : datum.category", "as": "short_category"},
-        // Sort by weekly_amount for consistent ordering
-        {"window": [{"op": "rank", "as": "amount_rank"}], "sort": [{"field": "weekly_amount", "order": "descending"}]}
+        // Create a sorted list of categories by amount
+        {"window": [{"op": "rank", "as": "rank"}], "sort": [{"field": "weekly_amount", "order": "descending"}]}
     ],
     "mark": {"type": "arc", "innerRadius": 50, "tooltip": true},
     "encoding": {
@@ -137,45 +137,24 @@ const weeklyWageAllocation = {
             "title": "Weekly Amount ($)"
         },
         "color": {
-            "field": "short_category",
-            "type": "nominal",
-            "title": "Spending Category",
+            "field": "rank",
+            "type": "quantitative",
+            "title": "Amount Rank",
             "scale": {
                 "range": [
-                    "#08306b", // Dark blue - highest amount
-                    "#08519c",
-                    "#2171b5",
-                    "#4292c6", 
-                    "#6baed6",
-                    "#9ecae1",
-                    "#c6dbef",
-                    "#deebf7",
-                    "#f7fbff"  // Light blue - lowest amount
+                    "#03045E", // Dark blue - highest amount
+                    "#023E8A",
+                    "#0077B6",
+                    "#0096C7", 
+                    "#00b4d8",
+                    "#48cae4",
+                    "#90e0ef",
+                    "#ade8f4",
+                    "#caf0f8"  // Light blue - lowest amount
                 ],
-                "domain": [
-                    "Housing",
-                    "Food and non-alcoholic beverages",
-                    "Transport",
-                    "Recreation",
-                    "Miscellaneous goods and services",
-                    "Medical care and health expenses",
-                    "Household furnishings and equipment",
-                    "Communication",
-                    "Household services and operation",
-                    "Clothing and footwear",
-                    "Education",
-                    "Domestic fuel and power",
-                    "Alcoholic beverages",
-                    "Personal care",
-                    "Tobacco products"
-                ]
+                "domain": [1, 2, 3, 4, 5, 6, 7, 8, 9] // Ranks from 1 (highest) to 9 (lowest)
             },
-            "sort": {"field": "weekly_amount", "order": "descending"},
-            "legend": {
-                "orient": "right",
-                "title": "Spending Categories",
-                "labelLimit": 200
-            }
+            "legend": null
         },
         "tooltip": [
             {"field": "short_category", "type": "nominal", "title": "Category"},
