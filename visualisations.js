@@ -501,23 +501,23 @@ const costPressures = {
     "width": "container",
     "height": 400,
     "title": "Cost Pressures by Category and Household Type",
-    "data": {
-        "url": "data/cost_pressures.csv",
-        "format": {
-            "type": "dsv",
-            "delimiter": "\t"
-        }
-    },
+    "data": {"url": "data/cost_pressures.csv"},
     "transform": [
         {"fold": ["employee_pressure", "pensioner_pressure", "self_funded_pressure"], "as": ["household_type", "pressure_level"]},
         {"calculate": "datum.household_type == 'employee_pressure' ? 'Employee' : datum.household_type == 'pensioner_pressure' ? 'Pensioner' : 'Self-Funded'", "as": "household_type_label"}
     ],
     "config": {
-        "view": {"stroke": "transparent"}
+        "view": {"stroke": "transparent"},
+        "axis": {
+            "labelFont": "Arial, sans-serif",
+            "labelFontSize": 12,
+            "titleFont": "Arial, sans-serif",
+            "titleFontSize": 14
+        }
     },
     "mark": {
         "type": "rect",
-        "stroke": "white",
+        "stroke": "black",
         "strokeWidth": 1,
         "cursor": "pointer"
     },
@@ -526,7 +526,7 @@ const costPressures = {
             "field": "household_type_label",
             "type": "nominal",
             "title": "Household Type",
-            "axis": {"grid": false}
+            "axis": {"grid": false, "labelAngle": 0}
         },
         "y": {
             "field": "category",
@@ -537,20 +537,25 @@ const costPressures = {
         },
         "color": {
             "field": "pressure_level",
-            "type": "ordinal",
+            "type": "nominal",
             "title": "Pressure Level",
             "scale": {
                 "domain": ["Low", "Medium", "High", "Very High"],
                 "range": ["#D2B7E5", "#B185DB", "#815AC0", "#6247AA"]
             },
-            "sort": ["Low", "Medium", "High", "Very High"],
             "legend": {
                 "title": "Pressure Level",
                 "orient": "top",
                 "direction": "horizontal",
-                "columns": 4,
-                "labelLimit": 100
+                "gradientLength": 300,
+                "labelFontSize": 12,
+                "titleFontSize": 14,
+                "symbolSize": 100
             }
+        },
+        "text": {
+            "field": "pressure_level",
+            "type": "nominal"
         },
         "tooltip": [
             {"field": "category", "type": "nominal", "title": "Category"},
