@@ -617,7 +617,14 @@ const categoryInflation = {
                 "range": ["#1f77b4", "#ffffff", "#ff7f0e"], // Blue -> White -> Orange
                 "domainMid": 0
             },
-            "legend": {"title": "Annual Change"}
+            "legend": {
+                "title": "Annual Change (%)",
+                "format": ".1%", // Add percentage formatting to legend
+                "orient": "top",
+                "direction": "horizontal",
+                "gradientLength": 300,
+                "labelOverlap": true
+            }
         },
         "tooltip": [
             {"field": "category", "type": "nominal", "title": "Category"},
