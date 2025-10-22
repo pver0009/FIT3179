@@ -23,134 +23,108 @@
                 of household spending and earnings data.</p>
         </section>
 
-
-        <!-- Earnings by State and Gender -->
-        <section class="visualization-section">
-            <h2>Weekly Earnings by State and Gender</h2>
-            <div class="chart-container">
-                <div id="earnings_by_gender"></div>
-                <div class="chart-description">
-                    <p>This chart shows weekly earnings across Australian states and territories, with filters for gender and state selection. ACT and Western Australia show the highest earnings, while Tasmania has the lowest. Gender pay gaps are visible across most states.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Weekly Wage Allocation -->
-        <section class="visualization-section">
-            <h2>How the Average Weekly Wage is Allocated</h2>
-            <div class="chart-container">
-                <div id="weekly_wage_allocation"></div>
-                <div class="chart-description">
-                    <p>Based on the average Australian weekly wage of $2,010, housing costs consume the largest share 
-                        at $452.25 per week (22.5%), reflecting the significant pressure of housing affordability on 
-                        household budgets. Essential living costs including food (16.6%), transport (14.5%), and housing 
-                        collectively account for over half (53.6%) of weekly expenditure, leaving limited discretionary 
-                        income. Recreation represents the fourth largest expense at 12.1%, indicating Australians prioritize 
-                        leisure activities despite cost-of-living pressures. The remaining 34.3% is distributed across 
-                        necessities like healthcare, education, and household operations, with tobacco products constituting 
-                        the smallest allocation at just 0.9% of spending.</p>
-                </div>
-            </div>
-        </section>
-        
-        <!-- Map Visualization -->
-        <section class="visualization-section">
-            <h2>Regional Cost of Living Comparison</h2>
-            <div class="chart-container">
-                <div id="cost_of_living_map"></div>
-                <div class="chart-description">
-                    <p>This map shows the relative cost of living across Australian capital cities, with Sydney and Canberra showing the highest CPI indices. The size of circles represents population weight, highlighting where most Australians experience cost pressures.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Inflation Trends -->
+        <!-- The Big Picture: National Economic Context -->
         <section class="visualization-section">
             <h2>Inflation Trends Over Time</h2>
             <div class="chart-container">
                 <div id="inflation_trends"></div>
                 <div class="chart-description">
-                    <p>Australia experienced significant inflation peaks in 2022-2023, with both headline CPI and trimmed mean measures showing sustained pressure. Recent data indicates a gradual return towards the target inflation band.</p>
+                    <p>Australia's economy experienced its most significant inflation surge in decades, with rates peaking at 7.8% in late 2022. The unprecedented convergence between headline CPI and trimmed mean inflation revealed broad-based price pressures affecting all sectors. While the economy shows gradual recovery toward the RBA's target band, this inflationary period fundamentally reshaped household financial pressures and purchasing power across the nation.</p>
                 </div>
             </div>
         </section>
 
-        <!-- Earnings vs Spending -->
+        <!-- Where Costs Hit Hardest: Regional Analysis -->
+        <section class="visualization-section">
+            <h2>Regional Cost of Living Comparison</h2>
+            <div class="chart-container">
+                <div id="cost_of_living_map"></div>
+                <div class="chart-description">
+                    <p>Contrary to common perception, Brisbane leads with the highest cost of living index (144.1), surpassing traditional expensive cities like Sydney and Melbourne. Western Australia shows the fastest-growing costs, with Perth experiencing 2.7% annual inflation. The concentration of population in high-cost cities means most Australians face elevated living expenses, challenging assumptions about regional affordability.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Income Story: Earnings Across Australia -->
+        <section class="visualization-section">
+            <h2>Weekly Earnings by State and Gender</h2>
+            <div class="chart-container">
+                <div id="earnings_by_gender"></div>
+                <div class="chart-description">
+                    <p>Significant earning disparities exist across geography and gender, with ACT residents earning 25% more than Tasmanians. The national gender pay gap persists at $242 weekly, most pronounced in Western Australia where males earn $457 more than females. These disparities highlight how location and gender continue to shape financial outcomes, creating vastly different starting points for managing living costs.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Affordability Equation: Income vs Expenses -->
         <section class="visualization-section">
             <h2>Weekly Earnings vs Essential Spending by State</h2>
             <div class="chart-container">
                 <div id="earnings_spending_comparison"></div>
                 <div class="chart-description">
-                    <p>Western Australia and ACT show the highest weekly earnings, while Tasmania has the lowest. However, higher earning states also face proportionally higher housing and essential living costs, affecting overall affordability.</p>
+                    <p>Higher earnings don't guarantee better living standards, as essential costs often scale with income levels. Western Australia and ACT lead in earnings but face proportionally higher living expenses, diminishing their disposable income advantage. Tasmania's low-income households confront different challenges, where modest costs still strain limited budgets. True affordability emerges from the delicate balance between local earnings and regional price structures.</p>
                 </div>
             </div>
         </section>
 
-        <!-- Living Cost Indexes -->
+        <!-- Household Budgets: Where the Money Goes -->
         <section class="visualization-section">
-            <h2>Living Cost Indexes by Household Type</h2>
+            <h2>How the Average Weekly Wage is Allocated</h2>
             <div class="chart-container">
-                <div id="living_cost_indexes"></div>
+                <div id="weekly_wage_allocation"></div>
                 <div class="chart-description">
-                    <p>Employee households have experienced the highest living cost increases, particularly during 2022-2023. Pensioner households show more moderate increases, reflecting different spending patterns and index calculation methods.</p>
+                    <p>Housing dominates Australian budgets, consuming 22.5% of the average $2,010 weekly wage. Combined with food (16.6%) and transport (14.5%), these essentials claim over half of household income, leaving limited discretionary spending. The allocation reveals national priorities and pressures, with recreation maintaining a significant share despite financial constraints, indicating Australians value lifestyle balance amid cost pressures.</p>
                 </div>
             </div>
         </section>
 
-        <!-- Spending Composition -->
+        <!-- Historical Shift: Changing Spending Patterns -->
         <section class="visualization-section">
             <h2>Household Spending Composition Over Time</h2>
             <div class="chart-container">
                 <div id="spending_composition"></div>
                 <div class="chart-description">
-                    <p>The data reveals a fundamental restructuring of Australian household budgets over four decades, 
-                        with housing costs nearly doubling from 12.8% to 22.5% of total expenditure. This dramatic increase 
-                        has been partially offset by significant reductions in food spending (down from 19.7% to 16.6%) and 
-                        transport costs (down from 16.3% to 14.5%). Clothing and footwear experienced the most dramatic 
-                        decline, falling from 6.5% to just 3.1% of household budgets, reflecting both globalization and 
-                        changing consumption patterns. Meanwhile, essential services like healthcare and education have 
-                        steadily increased their share, rising from 3.9% to 5.8% and 0.9% to 3.1% respectively. The data 
-                        clearly illustrates how housing affordability pressures have reshaped spending priorities, forcing 
-                        households to allocate less to discretionary categories like furnishings and clothing. This structural 
-                        shift highlights the growing financial burden of housing on Australian families over the past 40 years.</p>
+                    <p>Four decades of data reveal a fundamental restructuring of Australian household budgets, with housing's share nearly doubling since 1984. This dramatic increase came at the expense of clothing, food, and transport expenditures, while essential services like healthcare and education gained prominence. The transformation illustrates how housing affordability pressures have forced Australians to reallocate spending from discretionary categories to essential services and shelter.</p>
                 </div>
             </div>
         </section>
 
-        <!-- Cost Pressures -->
-        <section class="visualization-section">
-            <h2>Cost Pressures by Category and Household Type</h2>
-            <div class="chart-container">
-                <div id="cost_pressures"></div>
-                <div class="chart-description">
-                    <p>Insurance, financial services, and alcohol/tobacco create the highest cost pressures across most household types. Pensioners face particularly high pressure from alcohol/tobacco costs due to excise taxes.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Category Inflation -->
+        <!-- Current Price Pressures: What's Driving Costs Now -->
         <section class="visualization-section">
             <h2>Current Inflation by Spending Category</h2>
             <div class="chart-container">
                 <div id="category_inflation"></div>
                 <div class="chart-description">
-                    <p>The data reveals significant divergence in inflationary pressures across spending categories, 
-                        with alcohol and tobacco experiencing the highest annual increase at 5.7%, closely followed 
-                        by education at 5.5%. These substantial rises in discretionary spending categories contrast 
-                        sharply with transport costs, which have decreased by 2.6% annually due to fuel price reductions. 
-                        Health expenses continue to outpace general inflation at 4.1%, reflecting ongoing cost pressures 
-                        in medical services and insurance. Essential categories like food (3%) and housing (2%) show 
-                        moderate but persistent increases, contributing substantially to overall inflation given their 
-                        significant weight in household budgets. The divergence between categories highlights the uneven 
-                        impact of inflation across different aspects of household expenditure, with some areas providing 
-                        relief while others create additional financial pressure.</p>
+                    <p>Current inflationary pressures show remarkable divergence across spending categories. Alcohol/tobacco (5.7%) and education (5.5%) lead price increases, while transport costs provide rare relief with 2.6% deflation. Health expenses continue to outpace general inflation at 4.1%, maintaining pressure on household budgets. This uneven landscape creates a mixed financial experience where some essentials become more affordable while others escalate rapidly.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Differential Impacts: How Households Experience Costs -->
+        <section class="visualization-section">
+            <h2>Living Cost Indexes by Household Type</h2>
+            <div class="chart-container">
+                <div id="living_cost_indexes"></div>
+                <div class="chart-description">
+                    <p>Employee households experienced the steepest cost increases during recent inflation peaks, reflecting their exposure to rising mortgage and transportation costs. Pensioners showed more moderate increases, benefiting from different consumption patterns and government support mechanisms. Self-funded retirees faced intermediate pressures, caught between essential healthcare costs and reduced discretionary spending. These differential impacts demonstrate how the same economic conditions create varied financial stress depending on household composition.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pressure Points: Where Households Feel the Squeeze -->
+        <section class="visualization-section">
+            <h2>Cost Pressures by Category and Household Type</h2>
+            <div class="chart-container">
+                <div id="cost_pressures"></div>
+                <div class="chart-description">
+                    <p>Insurance and financial services create universal high pressure across all household types, driven by rising mortgage rates and insurance premiums. Pensioners face exceptional strain from alcohol/tobacco excise taxes, while self-funded retirees bear disproportionate health insurance costs. The concentration of pressure in essential services—housing, health, and financial obligations—reveals where Australian households are most vulnerable to economic shifts and policy changes.</p>
                 </div>
             </div>
         </section>
 
         <footer>
-            <p>Data Sources: Australian Bureau of Statistics (ABS) - Consumer Price Index, Average Weekly Earnings, Household Expenditure Survey, Selected Living Cost Indexes</p>
-            <p>Created for FIT3179 Data Visualisation 2 Assignment | Semester 2, 2025</p>
+            <p><strong>Data Sources:</strong> Australian Bureau of Statistics (ABS) - Consumer Price Index, Average Weekly Earnings, Household Expenditure Survey, Selected Living Cost Indexes | <strong>Period:</strong> 1984-2025</p>
+            <p>Created for FIT3179 Data Visualisation 2 Assignment | Semester 2, 2025 | Analysis of Australian Cost of Living and Regional Affordability</p>
         </footer>
     </div>
 
