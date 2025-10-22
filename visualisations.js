@@ -19,11 +19,12 @@ const earningsByStateGender = {
         {
             "filter": "datum.state != 'AUSTRALIA'"
         },
+        // Fixed filter logic - compare field values with parameter values
         {
-            "filter": {"param": "gender_select"}
+            "filter": {"field": "gender", "equal": {"expr": "gender_select"}}
         },
         {
-            "filter": {"param": "state_select"}
+            "filter": {"field": "state", "oneOf": {"expr": "state_select"}}
         }
     ],
     "params": [
@@ -54,8 +55,9 @@ const earningsByStateGender = {
             "field": "state",
             "type": "nominal",
             "title": "State/Territory",
-            "sort": "-y",
-            "axis": {"labelAngle": 0}
+            "axis": {"labelAngle": 0},
+            // Remove stacking by using offset
+            "scale": {"padding": 0.2}
         },
         "y": {
             "field": "weekly_earnings_numeric",
@@ -75,6 +77,14 @@ const earningsByStateGender = {
                 "symbolType": "circle"
             }
         },
+        // Add column encoding to separate bars by gender
+        "column": {
+            "field": "gender",
+            "type": "nominal",
+            "title": "Gender",
+            "header": {"title": ""},
+            "spacing": 10
+        },
         "tooltip": [
             {"field": "state", "type": "nominal", "title": "State"},
             {"field": "gender", "type": "nominal", "title": "Gender"},
@@ -89,7 +99,8 @@ const earningsByStateGender = {
         "legend": {
             "labelFontSize": 12,
             "titleFontSize": 14
-        }
+        },
+        "view": {"stroke": null}
     }
 };
 
