@@ -134,8 +134,7 @@ const weeklyWageAllocation = {
                 "theta": {
                     "field": "weekly_amount",
                     "type": "quantitative",
-                    "title": "Weekly Amount ($)",
-                    "sort": {"field": "weekly_amount", "order": "ascending"}
+                    "title": "Weekly Amount ($)"
                 },
                 "color": {
                     "field": "short_category",
@@ -143,7 +142,7 @@ const weeklyWageAllocation = {
                     "title": "Spending Categories",
                     "scale": {
                         "range": [
-                            "#012a4a", // Dark blue - highest amount
+                            "#012a4a", // Dark blue - smallest amount
                             "#013a63",
                             "#01497c",
                             "#014f86", 
@@ -156,7 +155,7 @@ const weeklyWageAllocation = {
                             "#979dac",
                             "#7d8597",
                             "#5c677d",
-                            "#33415c"
+                            "#33415c"  // Light blue - largest amount
                         ]
                     },
                     "sort": {"field": "weekly_amount", "order": "ascending"},
@@ -170,6 +169,11 @@ const weeklyWageAllocation = {
                         "symbolSize": 100,
                         "symbolType": "circle"
                     }
+                },
+                "order": {
+                    "field": "weekly_amount",
+                    "type": "quantitative",
+                    "sort": "ascending"
                 },
                 "tooltip": [
                     {"field": "short_category", "type": "nominal", "title": "Category"},
