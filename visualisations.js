@@ -155,7 +155,8 @@ const weeklyWageAllocation = {
                             "#979dac",
                             "#7d8597",
                             "#5c677d",
-                            "#33415c"  // Light blue - largest amount
+                            "#33415c",
+                            "#"  // Light blue - largest amount
                         ]
                     },
                     "sort": {"field": "weekly_amount", "order": "ascending"},
@@ -500,11 +501,16 @@ const costPressures = {
     "width": "container",
     "height": 400,
     "title": "Cost Pressures by Category and Household Type",
-    "data": {"url": "data/cost_pressures.csv"},
+    "data": {
+        "url": "data/cost_pressures.csv",
+        "format": {
+            "type": "dsv",
+            "delimiter": "\t"
+        }
+    },
     "transform": [
         {"fold": ["employee_pressure", "pensioner_pressure", "self_funded_pressure"], "as": ["household_type", "pressure_level"]},
-        {"calculate": "datum.household_type == 'employee_pressure' ? 'Employee' : datum.household_type == 'pensioner_pressure' ? 'Pensioner' : 'Self-Funded'", "as": "household_type_label"},
-        {"calculate": "datum.pressure_level == 'Very High' ? 4 : datum.pressure_level == 'High' ? 3 : datum.pressure_level == 'Medium' ? 2 : 1", "as": "pressure_score"}
+        {"calculate": "datum.household_type == 'employee_pressure' ? 'Employee' : datum.household_type == 'pensioner_pressure' ? 'Pensioner' : 'Self-Funded'", "as": "household_type_label"}
     ],
     "config": {
         "view": {"stroke": "transparent"}
@@ -512,7 +518,8 @@ const costPressures = {
     "mark": {
         "type": "rect",
         "stroke": "white",
-        "strokeWidth": 1
+        "strokeWidth": 1,
+        "cursor": "pointer"
     },
     "encoding": {
         "x": {
@@ -529,23 +536,20 @@ const costPressures = {
             "axis": {"grid": false}
         },
         "color": {
-            "field": "pressure_score",
-            "type": "quantitative",
+            "field": "pressure_level",
+            "type": "ordinal",
             "title": "Pressure Level",
             "scale": {
-                "domain": [1, 2, 3, 4],
+                "domain": ["Low", "Medium", "High", "Very High"],
                 "range": ["#D2B7E5", "#B185DB", "#815AC0", "#6247AA"]
             },
+            "sort": ["Low", "Medium", "High", "Very High"],
             "legend": {
                 "title": "Pressure Level",
                 "orient": "top",
                 "direction": "horizontal",
-                "gradientLength": 250,
-                "labelOverlap": true,
-                "tickCount": 4,
-                "format": "d",
-                "values": [1, 2, 3, 4],
-                "labelExpr": "['Low', 'Medium', 'High', 'Very High'][datum.value - 1]"
+                "columns": 4,
+                "labelLimit": 100
             }
         },
         "tooltip": [
