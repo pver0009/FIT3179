@@ -150,11 +150,19 @@ const weeklyWageAllocation = {
                     "#48cae4",
                     "#90e0ef",
                     "#ade8f4",
-                    "#caf0f8"  // Light blue - lowest amount
+                    "#e2fdff"  // Light blue - lowest amount
                 ],
                 "domain": [1, 2, 3, 4, 5, 6, 7, 8, 9] // Ranks from 1 (highest) to 9 (lowest)
             },
-            "legend": null
+            "legend": {
+                "orient": "right",
+                "title": "Spending Categories",
+                "labelLimit": 180,
+                "columns": 1,
+                "labelFontSize": 11,
+                "titleFontSize": 12,
+                "symbolSize": 120
+            }
         },
         "tooltip": [
             {"field": "short_category", "type": "nominal", "title": "Category"},
