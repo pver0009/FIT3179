@@ -1,9 +1,9 @@
-﻿category,employee_pressure,pensioner_pressure,self_funded_pressure,primary_driver
-Insurance and financial services,High,High,Medium,Mortgage interest rates
-Alcohol and tobacco,High,Very High,Medium,Excise taxes
-Health,Medium,Medium,High,Insurance premiums
-Education,Medium,Low,Low,Tuition fees
-Housing,Medium,High,Low,Rent and utilities
-Food and non-alcoholic beverages,Medium,Medium,Medium,Supply chain costs
-Transport,Low,Low,Low,Fuel prices
-Communication,Low,Low,Low,Plan costs
+﻿"category,employee_pressure,pensioner_pressure,self_funded_pressure,primary_driver"
+"Insurance and financial services,High,High,Medium,Mortgage interest rates"
+"Alcohol and tobacco,High,Very High,Medium,Excise taxes"
+"Health,Medium,Medium,High,Insurance premiums"
+"Education,Medium,Low,Low,Tuition fees"
+"Housing,Medium,High,Low,Rent and utilities"
+"Food and non-alcoholic beverages,Medium,Medium,Medium,Supply chain costs"
+"Transport,Low,Low,Low,Fuel prices"
+"Communication,Low,Low,Low,Plan costs"
