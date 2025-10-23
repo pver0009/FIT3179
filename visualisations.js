@@ -2,228 +2,126 @@
 
 // 1. Earnings by State and Gender Bar Chart with Filters
 const earningsByStateGender = {
-  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
-  "data": {
-    "url": "earnings_data_clean.csv"
-  },
-  "transform": [
-    {
-      "aggregate": [
-        {
-          "op": "sum",
-          "field": "weekly_earnings",
-          "as": "total_earnings"
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "width": "container",
+    "height": 400,
+    "title": "Weekly Earnings by State and Gender",
+    "data": {
+        "url": "data/earnings_data.csv",
+        "format": {
+            "type": "dsv",
+            "delimiter": "\t"
         }
-      ],
-      "groupby": ["state", "gender"]
     },
-    {
-      "stack": "total_earnings",
-      "groupby": [],
-      "as": ["stack_earnings1", "stack_earnings2"],
-      "offset": "normalize",
-      "sort": [
+    "transform": [
         {
-          "field": "state",
-          "order": "ascending"
-        }
-      ]
-    },
-    {
-      "window": [
-        {
-          "op": "min",
-          "field": "stack_earnings1",
-          "as": "x"
+            "calculate": "replace(datum.weekly_earnings, ',', '')",
+            "as": "weekly_earnings_clean"
         },
         {
-          "op": "max",
-          "field": "stack_earnings2",
-          "as": "x2"
+            "calculate": "toNumber(datum.weekly_earnings_clean)",
+            "as": "weekly_earnings_numeric"
         },
         {
-          "op": "dense_rank",
-          "as": "rank_gender"
+            "filter": "datum.state != 'AUSTRALIA'"
         },
         {
-          "op": "distinct",
-          "field": "gender",
-          "as": "distinct_gender"
+            "calculate": "datum.gender == 'person' ? 'All Persons' : datum.gender == 'male' ? 'Males' : 'Females'",
+            "as": "gender_label"
         }
-      ],
-      "groupby": ["state"],
-      "frame": [null, null],
-      "sort": [
+    ],
+    "params": [
         {
-          "field": "gender",
-          "order": "ascending"
-        }
-      ]
-    },
-    {
-      "window": [
+            "name": "gender_select",
+            "value": ["All Persons", "Males", "Females"],
+            "bind": {
+                "input": "select",
+                "options": ["All Persons", "Males", "Females"],
+                "name": "Gender: ",
+                "select": true
+            }
+        },
         {
-          "op": "dense_rank",
-          "as": "rank_state"
-        }
-      ],
-      "frame": [null, null],
-      "sort": [
+            "name": "state_select",
+            "value": ["NSW", "VIC", "QLD", "SA", "WA", "TAS", "NT", "ACT"],
+            "bind": {
+                "input": "select",
+                "options": ["NSW", "VIC", "QLD", "SA", "WA", "TAS", "NT", "ACT"],
+                "name": "States: ",
+                "select": true
+            }
+        },
         {
-          "field": "state",
-          "order": "ascending"
+            "name": "earnings_range",
+            "value": [1700, 2400],
+            "bind": {
+                "input": "range",
+                "min": 1700,
+                "max": 2400,
+                "step": 50,
+                "name": "Earnings Range ($): "
+            }
         }
-      ]
-    },
-    {
-      "stack": "total_earnings",
-      "groupby": ["state"],
-      "as": ["y", "y2"],
-      "offset": "normalize",
-      "sort": [
+    ],
+    "transform": [
         {
-          "field": "gender",
-          "order": "ascending"
+            "filter": {"param": "gender_select"}
+        },
+        {
+            "filter": {"param": "state_select"}
+        },
+        {
+            "filter": "datum.weekly_earnings_numeric >= earnings_range[0] && datum.weekly_earnings_numeric <= earnings_range[1]"
         }
-      ]
-    },
-    {
-      "calculate": "datum.y + (datum.rank_gender - 1) * datum.distinct_gender * 0.01 / 3",
-      "as": "ny"
-    },
-    {
-      "calculate": "datum.y2 + (datum.rank_gender - 1) * datum.distinct_gender * 0.01 / 3",
-      "as": "ny2"
-    },
-    {
-      "calculate": "datum.x + (datum.rank_state - 1) * 0.01",
-      "as": "nx"
-    },
-    {
-      "calculate": "datum.x2 + (datum.rank_state - 1) * 0.01",
-      "as": "nx2"
-    },
-    {
-      "calculate": "(datum.nx+datum.nx2)/2",
-      "as": "xc"
-    },
-    {
-      "calculate": "(datum.ny+datum.ny2)/2",
-      "as": "yc"
-    }
-  ],
-  "vconcat": [
-    {
-      "mark": {
-        "type": "text",
-        "baseline": "middle",
-        "align": "center"
-      },
-      "encoding": {
+    ],
+    "mark": "bar",
+    "encoding": {
         "x": {
-          "aggregate": "min",
-          "field": "xc",
-          "title": "State",
-          "axis": {
-            "orient": "top"
-          }
+            "field": "state",
+            "type": "nominal",
+            "title": "State/Territory",
+            "axis": {"labelAngle": 0},
+            "sort": "-y"
+        },
+        "y": {
+            "field": "weekly_earnings_numeric",
+            "type": "quantitative",
+            "title": "Weekly Earnings ($)",
+            "scale": {"domain": [1700, 2400]}
         },
         "color": {
-          "field": "state",
-          "legend": null
-        },
-        "text": {"field": "state"}
-      }
-    },
-    {
-      "layer": [
-        {
-          "mark": {
-            "type": "rect"
-          },
-          "encoding": {
-            "x": {
-              "field": "nx",
-              "type": "quantitative",
-              "axis": null
+            "field": "gender_label",
+            "type": "nominal",
+            "title": "Gender",
+            "scale": {
+                "domain": ["All Persons", "Males", "Females"],
+                "range": ["#6f3ce7", "#1b7fc2", "#cc9d2eff"] // Purple, Blue, Teal (no red)
             },
-            "x2": {"field": "nx2"},
-            "y": {
-              "field": "ny",
-              "type": "quantitative"
-            },
-            "y2": {"field": "ny2"},
-            "color": {
-              "field": "state",
-              "type": "nominal",
-              "legend": null
-            },
-            "opacity": {
-              "field": "gender",
-              "type": "nominal",
-              "legend": null
-            },
-            "tooltip": [
-              {
-                "field": "state",
-                "type": "nominal"
-              },
-              {
-                "field": "gender",
-                "type": "nominal"
-              },
-              {
-                "field": "weekly_earnings",
-                "type": "quantitative",
-                "format": ".1f"
-              }
-            ]
-          }
-        },
-        {
-          "mark": {
-            "type": "text",
-            "baseline": "middle"
-          },
-          "encoding": {
-            "x": {
-              "field": "xc",
-              "type": "quantitative",
-              "axis": null
-            },
-            "y": {
-              "field": "yc",
-              "type": "quantitative",
-              "axis": {
-                "title": "Gender"
-              }
-            },
-            "text": {
-              "field": "gender",
-              "type": "nominal"
+            "legend": {
+                "orient": "top",
+                "direction": "horizontal",
+                "title": "Gender",
+                "labelFontSize": 12,
+                "titleFontSize": 14
             }
-          }
-        }
-      ]
-    }
-  ],
-  "resolve": {
-    "scale": {
-      "x": "shared"
-    }
-  },
-  "config": {
-    "view": {
-      "stroke": ""
+        },
+        "xOffset": {
+            "field": "gender_label",
+            "type": "nominal"
+        },
+        "tooltip": [
+            {"field": "state", "type": "nominal", "title": "State"},
+            {"field": "gender_label", "type": "nominal", "title": "Gender"},
+            {"field": "weekly_earnings_numeric", "type": "quantitative", "title": "Weekly Earnings", "format": "$.2f"}
+        ]
     },
-    "concat": {"spacing": 10},
-    "axis": {
-      "domain": false,
-      "ticks": false,
-      "labels": false,
-      "grid": false
+    "config": {
+        "axis": {
+            "labelFontSize": 12,
+            "titleFontSize": 14
+        },
+        "view": {"stroke": null}
     }
-  }
 };
 
 // 2. Weekly Wage Allocation Pie Chart
@@ -622,92 +520,265 @@ const spendingComposition = {
 
 // 8. Cost Pressures Heatmap 
 const costPressures = {
-    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-    "width": "container",
-    "height": 400,
-    "title": "Cost Pressures by Category and Household Type",
-    "data": {
-        "url": "data/cost_pressures.csv"
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "data": {
+    "values": [
+      {"category": "Insurance and financial services", "employee_pressure": "High", "pensioner_pressure": "High", "self_funded_pressure": "Medium", "primary_driver": "Mortgage interest rates"},
+      {"category": "Alcohol and tobacco", "employee_pressure": "High", "pensioner_pressure": "Very High", "self_funded_pressure": "Medium", "primary_driver": "Excise taxes"},
+      {"category": "Health", "employee_pressure": "Medium", "pensioner_pressure": "Medium", "self_funded_pressure": "High", "primary_driver": "Insurance premiums"},
+      {"category": "Education", "employee_pressure": "Medium", "pensioner_pressure": "Low", "self_funded_pressure": "Low", "primary_driver": "Tuition fees"},
+      {"category": "Housing", "employee_pressure": "Medium", "pensioner_pressure": "High", "self_funded_pressure": "Low", "primary_driver": "Rent and utilities"},
+      {"category": "Food and non-alcoholic beverages", "employee_pressure": "Medium", "pensioner_pressure": "Medium", "self_funded_pressure": "Medium", "primary_driver": "Supply chain costs"},
+      {"category": "Transport", "employee_pressure": "Low", "pensioner_pressure": "Low", "self_funded_pressure": "Low", "primary_driver": "Fuel prices"},
+      {"category": "Communication", "employee_pressure": "Low", "pensioner_pressure": "Low", "self_funded_pressure": "Low", "primary_driver": "Plan costs"}
+    ]
+  },
+  "transform": [
+    {
+      "fold": ["employee_pressure", "pensioner_pressure", "self_funded_pressure"],
+      "as": ["pressure_type", "pressure_level"]
     },
-    "transform": [
-        {"fold": ["employee_pressure", "pensioner_pressure", "self_funded_pressure"], "as": ["household_type", "pressure_level"]},
-        {"calculate": "datum.household_type == 'employee_pressure' ? 'Employee' : datum.household_type == 'pensioner_pressure' ? 'Pensioner' : 'Self-Funded'", "as": "household_type_label"}
-    ],
-    "layer": [
+    {
+      "aggregate": [
         {
-            "mark": {
-                "type": "rect",
-                "stroke": "black",
-                "strokeWidth": 1,
-                "cursor": "pointer"
-            },
-            "encoding": {
-                "x": {
-                    "field": "household_type_label",
-                    "type": "nominal",
-                    "title": "Household Type",
-                    "axis": {"grid": false, "labelAngle": 0}
-                },
-                "y": {
-                    "field": "category",
-                    "type": "nominal",
-                    "title": "Spending Category",
-                    "sort": "-x",
-                    "axis": {"grid": false}
-                },
-                "color": {
-                    "field": "pressure_level",
-                    "type": "nominal",
-                    "title": "Pressure Level",
-                    "scale": {
-                        "domain": ["Low", "Medium", "High", "Very High"],
-                        "range": ["#D2B7E5", "#B185DB", "#815AC0", "#6247AA"]
-                    },
-                    "legend": {
-                        "title": "Pressure Level",
-                        "orient": "top",
-                        "direction": "horizontal",
-                        "labelFontSize": 12,
-                        "titleFontSize": 14,
-                        "symbolSize": 100
-                    }
-                }
-            }
+          "op": "count",
+          "as": "count_*"
+        }
+      ],
+      "groupby": [
+        "category",
+        "pressure_level"
+      ]
+    },
+    {
+      "stack": "count_*",
+      "groupby": [],
+      "as": [
+        "stack_count_category1",
+        "stack_count_category2"
+      ],
+      "offset": "normalize",
+      "sort": [
+        {
+          "field": "category",
+          "order": "ascending"
+        }
+      ]
+    },
+    {
+      "window": [
+        {
+          "op": "min",
+          "field": "stack_count_category1",
+          "as": "x"
         },
         {
-            "mark": {
-                "type": "text",
-                "align": "center",
-                "baseline": "middle",
-                "fontSize": 11,
-                "fontWeight": "bold",
-                "color": "black"
-            },
-            "encoding": {
-                "x": {
-                    "field": "household_type_label",
-                    "type": "nominal"
-                },
-                "y": {
-                    "field": "category",
-                    "type": "nominal"
-                },
-                "text": {
-                    "field": "pressure_level",
-                    "type": "nominal"
-                }
-            }
+          "op": "max",
+          "field": "stack_count_category2",
+          "as": "x2"
+        },
+        {
+          "op": "dense_rank",
+          "as": "rank_pressure_level"
+        },
+        {
+          "op": "distinct",
+          "field": "pressure_level",
+          "as": "distinct_pressure_level"
         }
-    ],
-    "config": {
-        "view": {"stroke": "transparent"},
-        "axis": {
-            "labelFont": "Arial, sans-serif",
-            "labelFontSize": 12,
-            "titleFont": "Arial, sans-serif",
-            "titleFontSize": 14
+      ],
+      "groupby": [
+        "category"
+      ],
+      "frame": [
+        null,
+        null
+      ],
+      "sort": [
+        {
+          "field": "pressure_level",
+          "order": "ascending"
         }
+      ]
+    },
+    {
+      "window": [
+        {
+          "op": "dense_rank",
+          "as": "rank_category"
+        }
+      ],
+      "frame": [
+        null,
+        null
+      ],
+      "sort": [
+        {
+          "field": "category",
+          "order": "ascending"
+        }
+      ]
+    },
+    {
+      "stack": "count_*",
+      "groupby": [
+        "category"
+      ],
+      "as": [
+        "y",
+        "y2"
+      ],
+      "offset": "normalize",
+      "sort": [
+        {
+          "field": "pressure_level",
+          "order": "ascending"
+        }
+      ]
+    },
+    {
+      "calculate": "datum.y + (datum.rank_pressure_level - 1) * datum.distinct_pressure_level * 0.01 / 3",
+      "as": "ny"
+    },
+    {
+      "calculate": "datum.y2 + (datum.rank_pressure_level - 1) * datum.distinct_pressure_level * 0.01 / 3",
+      "as": "ny2"
+    },
+    {
+      "calculate": "datum.x + (datum.rank_category - 1) * 0.01",
+      "as": "nx"
+    },
+    {
+      "calculate": "datum.x2 + (datum.rank_category - 1) * 0.01",
+      "as": "nx2"
+    },
+    {
+      "calculate": "(datum.nx+datum.nx2)/2",
+      "as": "xc"
+    },
+    {
+      "calculate": "(datum.ny+datum.ny2)/2",
+      "as": "yc"
     }
+  ],
+  "vconcat": [
+    {
+      "mark": {
+        "type": "text",
+        "baseline": "middle",
+        "align": "center"
+      },
+      "encoding": {
+        "x": {
+          "aggregate": "min",
+          "field": "xc",
+          "title": "Category",
+          "axis": {
+            "orient": "top"
+          }
+        },
+        "color": {
+          "field": "category",
+          "legend": null,
+          "scale": {
+            "range": ["#D2B7E5", "#B185DB", "#815AC0", "#6247AA", "#9B6B9E", "#7A4988", "#5C3972", "#4A2C5A"]
+          }
+        },
+        "text": {"field": "category"}
+      }
+    },
+    {
+      "layer": [
+        {
+          "mark": {
+            "type": "rect"
+          },
+          "encoding": {
+            "x": {
+              "field": "nx",
+              "type": "quantitative",
+              "axis": null
+            },
+            "x2": {"field": "nx2"},
+            "y": {
+              "field": "ny",
+              "type": "quantitative"
+            },
+            "y2": {"field": "ny2"},
+            "color": {
+              "field": "pressure_level",
+              "type": "nominal",
+              "scale": {
+                "domain": ["Very High", "High", "Medium", "Low"],
+                "range": ["#6247AA", "#815AC0", "#B185DB", "#D2B7E5"]
+              },
+              "legend": {
+                "title": "Pressure Level",
+                "orient": "bottom"
+              }
+            },
+            "tooltip": [
+              {
+                "field": "category",
+                "type": "nominal"
+              },
+              {
+                "field": "pressure_type",
+                "type": "nominal",
+                "title": "Pressure Type"
+              },
+              {
+                "field": "pressure_level",
+                "type": "nominal"
+              }
+            ]
+          }
+        },
+        {
+          "mark": {
+            "type": "text",
+            "baseline": "middle",
+            "fontSize": 10
+          },
+          "encoding": {
+            "x": {
+              "field": "xc",
+              "type": "quantitative",
+              "axis": null
+            },
+            "y": {
+              "field": "yc",
+              "type": "quantitative",
+              "axis": {
+                "title": "Pressure Type"
+              }
+            },
+            "text": {
+              "field": "pressure_type",
+              "type": "nominal"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "resolve": {
+    "scale": {
+      "x": "shared"
+    }
+  },
+  "config": {
+    "view": {
+      "stroke": ""
+    },
+    "concat": {"spacing": 10},
+    "axis": {
+      "domain": false,
+      "ticks": false,
+      "labels": false,
+      "grid": false
+    }
+  }
 };
 
 // 9. Category Inflation Bar Chart
