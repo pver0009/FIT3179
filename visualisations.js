@@ -24,16 +24,19 @@ const earningsByStateGender = {
         },
         {
             "filter": "datum.state != 'AUSTRALIA'"
+        },
+        {
+            "calculate": "datum.gender == 'person' ? 'All Persons' : datum.gender == 'male' ? 'Males' : 'Females'",
+            "as": "gender_label"
         }
     ],
     "params": [
         {
             "name": "gender_select",
-            "value": ["person", "male", "female"],
+            "value": ["All Persons", "Males", "Females"],
             "bind": {
                 "input": "select",
-                "options": ["person", "male", "female"],
-                "labels": ["All Persons", "Males", "Females"],
+                "options": ["All Persons", "Males", "Females"],
                 "name": "Gender: ",
                 "select": true
             }
@@ -47,25 +50,28 @@ const earningsByStateGender = {
                 "name": "States: ",
                 "select": true
             }
+        },
+        {
+            "name": "earnings_range",
+            "value": [1700, 2400],
+            "bind": {
+                "input": "range",
+                "min": 1700,
+                "max": 2400,
+                "step": 50,
+                "name": "Earnings Range ($): "
+            }
         }
     ],
     "transform": [
-        {
-            "calculate": "replace(datum.weekly_earnings, ',', '')",
-            "as": "weekly_earnings_clean"
-        },
-        {
-            "calculate": "toNumber(datum.weekly_earnings_clean)",
-            "as": "weekly_earnings_numeric"
-        },
-        {
-            "filter": "datum.state != 'AUSTRALIA'"
-        },
         {
             "filter": {"param": "gender_select"}
         },
         {
             "filter": {"param": "state_select"}
+        },
+        {
+            "filter": "datum.weekly_earnings_numeric >= earnings_range[0] && datum.weekly_earnings_numeric <= earnings_range[1]"
         }
     ],
     "mark": "bar",
@@ -80,34 +86,37 @@ const earningsByStateGender = {
         "y": {
             "field": "weekly_earnings_numeric",
             "type": "quantitative",
-            "title": "Weekly Earnings ($)"
+            "title": "Weekly Earnings ($)",
+            "scale": {"domain": [1700, 2400]}
         },
         "color": {
-            "field": "gender",
+            "field": "gender_label",
             "type": "nominal",
             "title": "Gender",
             "scale": {
-                "domain": ["person", "male", "female"],
-                "range": ["#3498db", "#2ecc71", "#e74c3c"]
+                "domain": ["All Persons", "Males", "Females"],
+                "range": ["#6f3ce7", "#1b7fc2", "#cc9d2eff"] // Purple, Blue, Teal (no red)
+            },
+            "legend": {
+                "orient": "top",
+                "direction": "horizontal",
+                "title": "Gender",
+                "labelFontSize": 12,
+                "titleFontSize": 14
             }
         },
-        // Use xOffset for side-by-side bars instead of column
         "xOffset": {
-            "field": "gender",
+            "field": "gender_label",
             "type": "nominal"
         },
         "tooltip": [
             {"field": "state", "type": "nominal", "title": "State"},
-            {"field": "gender", "type": "nominal", "title": "Gender"},
+            {"field": "gender_label", "type": "nominal", "title": "Gender"},
             {"field": "weekly_earnings_numeric", "type": "quantitative", "title": "Weekly Earnings", "format": "$.2f"}
         ]
     },
     "config": {
         "axis": {
-            "labelFontSize": 12,
-            "titleFontSize": 14
-        },
-        "legend": {
             "labelFontSize": 12,
             "titleFontSize": 14
         },
