@@ -2,126 +2,228 @@
 
 // 1. Earnings by State and Gender Bar Chart with Filters
 const earningsByStateGender = {
-    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-    "width": "container",
-    "height": 400,
-    "title": "Weekly Earnings by State and Gender",
-    "data": {
-        "url": "data/earnings_data.csv",
-        "format": {
-            "type": "dsv",
-            "delimiter": "\t"
+  "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "data": {
+    "url": "earnings_data_clean.csv"
+  },
+  "transform": [
+    {
+      "aggregate": [
+        {
+          "op": "sum",
+          "field": "weekly_earnings",
+          "as": "total_earnings"
         }
+      ],
+      "groupby": ["state", "gender"]
     },
-    "transform": [
+    {
+      "stack": "total_earnings",
+      "groupby": [],
+      "as": ["stack_earnings1", "stack_earnings2"],
+      "offset": "normalize",
+      "sort": [
         {
-            "calculate": "replace(datum.weekly_earnings, ',', '')",
-            "as": "weekly_earnings_clean"
-        },
-        {
-            "calculate": "toNumber(datum.weekly_earnings_clean)",
-            "as": "weekly_earnings_numeric"
-        },
-        {
-            "filter": "datum.state != 'AUSTRALIA'"
-        },
-        {
-            "calculate": "datum.gender == 'person' ? 'All Persons' : datum.gender == 'male' ? 'Males' : 'Females'",
-            "as": "gender_label"
+          "field": "state",
+          "order": "ascending"
         }
-    ],
-    "params": [
+      ]
+    },
+    {
+      "window": [
         {
-            "name": "gender_select",
-            "value": ["All Persons", "Males", "Females"],
-            "bind": {
-                "input": "select",
-                "options": ["All Persons", "Males", "Females"],
-                "name": "Gender: ",
-                "select": true
-            }
+          "op": "min",
+          "field": "stack_earnings1",
+          "as": "x"
         },
         {
-            "name": "state_select",
-            "value": ["NSW", "VIC", "QLD", "SA", "WA", "TAS", "NT", "ACT"],
-            "bind": {
-                "input": "select",
-                "options": ["NSW", "VIC", "QLD", "SA", "WA", "TAS", "NT", "ACT"],
-                "name": "States: ",
-                "select": true
-            }
+          "op": "max",
+          "field": "stack_earnings2",
+          "as": "x2"
         },
         {
-            "name": "earnings_range",
-            "value": [1700, 2400],
-            "bind": {
-                "input": "range",
-                "min": 1700,
-                "max": 2400,
-                "step": 50,
-                "name": "Earnings Range ($): "
-            }
+          "op": "dense_rank",
+          "as": "rank_gender"
+        },
+        {
+          "op": "distinct",
+          "field": "gender",
+          "as": "distinct_gender"
         }
-    ],
-    "transform": [
+      ],
+      "groupby": ["state"],
+      "frame": [null, null],
+      "sort": [
         {
-            "filter": {"param": "gender_select"}
-        },
-        {
-            "filter": {"param": "state_select"}
-        },
-        {
-            "filter": "datum.weekly_earnings_numeric >= earnings_range[0] && datum.weekly_earnings_numeric <= earnings_range[1]"
+          "field": "gender",
+          "order": "ascending"
         }
-    ],
-    "mark": "bar",
-    "encoding": {
+      ]
+    },
+    {
+      "window": [
+        {
+          "op": "dense_rank",
+          "as": "rank_state"
+        }
+      ],
+      "frame": [null, null],
+      "sort": [
+        {
+          "field": "state",
+          "order": "ascending"
+        }
+      ]
+    },
+    {
+      "stack": "total_earnings",
+      "groupby": ["state"],
+      "as": ["y", "y2"],
+      "offset": "normalize",
+      "sort": [
+        {
+          "field": "gender",
+          "order": "ascending"
+        }
+      ]
+    },
+    {
+      "calculate": "datum.y + (datum.rank_gender - 1) * datum.distinct_gender * 0.01 / 3",
+      "as": "ny"
+    },
+    {
+      "calculate": "datum.y2 + (datum.rank_gender - 1) * datum.distinct_gender * 0.01 / 3",
+      "as": "ny2"
+    },
+    {
+      "calculate": "datum.x + (datum.rank_state - 1) * 0.01",
+      "as": "nx"
+    },
+    {
+      "calculate": "datum.x2 + (datum.rank_state - 1) * 0.01",
+      "as": "nx2"
+    },
+    {
+      "calculate": "(datum.nx+datum.nx2)/2",
+      "as": "xc"
+    },
+    {
+      "calculate": "(datum.ny+datum.ny2)/2",
+      "as": "yc"
+    }
+  ],
+  "vconcat": [
+    {
+      "mark": {
+        "type": "text",
+        "baseline": "middle",
+        "align": "center"
+      },
+      "encoding": {
         "x": {
-            "field": "state",
-            "type": "nominal",
-            "title": "State/Territory",
-            "axis": {"labelAngle": 0},
-            "sort": "-y"
-        },
-        "y": {
-            "field": "weekly_earnings_numeric",
-            "type": "quantitative",
-            "title": "Weekly Earnings ($)",
-            "scale": {"domain": [1700, 2400]}
+          "aggregate": "min",
+          "field": "xc",
+          "title": "State",
+          "axis": {
+            "orient": "top"
+          }
         },
         "color": {
-            "field": "gender_label",
-            "type": "nominal",
-            "title": "Gender",
-            "scale": {
-                "domain": ["All Persons", "Males", "Females"],
-                "range": ["#6f3ce7", "#1b7fc2", "#cc9d2eff"] // Purple, Blue, Teal (no red)
-            },
-            "legend": {
-                "orient": "top",
-                "direction": "horizontal",
-                "title": "Gender",
-                "labelFontSize": 12,
-                "titleFontSize": 14
-            }
+          "field": "state",
+          "legend": null
         },
-        "xOffset": {
-            "field": "gender_label",
-            "type": "nominal"
-        },
-        "tooltip": [
-            {"field": "state", "type": "nominal", "title": "State"},
-            {"field": "gender_label", "type": "nominal", "title": "Gender"},
-            {"field": "weekly_earnings_numeric", "type": "quantitative", "title": "Weekly Earnings", "format": "$.2f"}
-        ]
+        "text": {"field": "state"}
+      }
     },
-    "config": {
-        "axis": {
-            "labelFontSize": 12,
-            "titleFontSize": 14
+    {
+      "layer": [
+        {
+          "mark": {
+            "type": "rect"
+          },
+          "encoding": {
+            "x": {
+              "field": "nx",
+              "type": "quantitative",
+              "axis": null
+            },
+            "x2": {"field": "nx2"},
+            "y": {
+              "field": "ny",
+              "type": "quantitative"
+            },
+            "y2": {"field": "ny2"},
+            "color": {
+              "field": "state",
+              "type": "nominal",
+              "legend": null
+            },
+            "opacity": {
+              "field": "gender",
+              "type": "nominal",
+              "legend": null
+            },
+            "tooltip": [
+              {
+                "field": "state",
+                "type": "nominal"
+              },
+              {
+                "field": "gender",
+                "type": "nominal"
+              },
+              {
+                "field": "weekly_earnings",
+                "type": "quantitative",
+                "format": ".1f"
+              }
+            ]
+          }
         },
-        "view": {"stroke": null}
+        {
+          "mark": {
+            "type": "text",
+            "baseline": "middle"
+          },
+          "encoding": {
+            "x": {
+              "field": "xc",
+              "type": "quantitative",
+              "axis": null
+            },
+            "y": {
+              "field": "yc",
+              "type": "quantitative",
+              "axis": {
+                "title": "Gender"
+              }
+            },
+            "text": {
+              "field": "gender",
+              "type": "nominal"
+            }
+          }
+        }
+      ]
     }
+  ],
+  "resolve": {
+    "scale": {
+      "x": "shared"
+    }
+  },
+  "config": {
+    "view": {
+      "stroke": ""
+    },
+    "concat": {"spacing": 10},
+    "axis": {
+      "domain": false,
+      "ticks": false,
+      "labels": false,
+      "grid": false
+    }
+  }
 };
 
 // 2. Weekly Wage Allocation Pie Chart
@@ -278,16 +380,6 @@ const inflationTrends = {
     "data": {
         "url": "data/inflation_data.csv"
     },
-    "transform": [
-        {
-            "fold": ["all_groups_cpi", "trimmed_mean"],
-            "as": ["metric_type", "inflation_rate"]
-        },
-        {
-            "calculate": "datum.metric_type == 'all_groups_cpi' ? 'Headline CPI' : 'Trimmed Mean'",
-            "as": "metric_label"
-        }
-    ],
     "params": [
         {
             "name": "metric_select",
@@ -300,14 +392,13 @@ const inflationTrends = {
             }
         },
         {
-            "name": "year_range",
-            "value": [2015, 2025],
+            "name": "time_period",
+            "value": "all",
             "bind": {
-                "input": "range",
-                "min": 2015,
-                "max": 2025,
-                "step": 1,
-                "name": "Year Range: "
+                "input": "select",
+                "options": ["all", "pre_2020", "2020_2022", "post_2022"],
+                "labels": ["All Years (2015-2025)", "Pre-2020 (2015-2019)", "Peak Inflation (2020-2022)", "Recent (2023-2025)"],
+                "name": "Time Period: "
             }
         }
     ],
@@ -317,61 +408,57 @@ const inflationTrends = {
             "as": "year"
         },
         {
-            "filter": "datum.year >= year_range[0] && datum.year <= year_range[1]"
-        },
-        {
-            "filter": {"param": "metric_select"}
+            "filter": "time_period == 'all' || (time_period == 'pre_2020' && year < 2020) || (time_period == '2020_2022' && year >= 2020 && year <= 2022) || (time_period == 'post_2022' && year > 2022)"
         }
     ],
-    "encoding": {
-        "x": {
-            "field": "year_quarter",
-            "type": "ordinal",
-            "title": "Year Quarter",
-            "axis": {"labelAngle": -45},
-            "sort": null
-        }
-    },
     "layer": [
         {
             "mark": {
                 "type": "line",
+                "stroke": "#6f3ce7",
                 "strokeWidth": 3,
                 "point": true
             },
             "encoding": {
+                "x": {
+                    "field": "year_quarter",
+                    "type": "ordinal",
+                    "title": "Year Quarter",
+                    "axis": {"labelAngle": -45},
+                    "sort": null
+                },
                 "y": {
-                    "field": "inflation_rate",
+                    "field": "all_groups_cpi",
                     "type": "quantitative",
                     "title": "Inflation Rate (%)",
                     "scale": {"domain": [-2, 10]}
                 },
-                "color": {
-                    "field": "metric_label",
-                    "type": "nominal",
-                    "title": "Inflation Measure",
-                    "scale": {
-                        "domain": ["Headline CPI", "Trimmed Mean"],
-                        "range": ["#6f3ce7", "#1b7fc2"]
-                    },
-                    "legend": {
-                        "orient": "top",
-                        "direction": "horizontal"
-                    }
+                "tooltip": [
+                    {"field": "year_quarter", "type": "nominal", "title": "Quarter"},
+                    {"field": "all_groups_cpi", "type": "quantitative", "title": "Headline CPI", "format": ".1f"}
+                ]
+            }
+        },
+        {
+            "mark": {
+                "type": "line",
+                "stroke": "#1b7fc2",
+                "strokeWidth": 2,
+                "strokeDash": [5, 5],
+                "point": true
+            },
+            "encoding": {
+                "x": {
+                    "field": "year_quarter",
+                    "type": "ordinal"
                 },
-                "strokeDash": {
-                    "field": "metric_label",
-                    "type": "nominal",
-                    "scale": {
-                        "domain": ["Headline CPI", "Trimmed Mean"],
-                        "range": [[], [5, 5]]
-                    },
-                    "legend": null
+                "y": {
+                    "field": "trimmed_mean",
+                    "type": "quantitative"
                 },
                 "tooltip": [
                     {"field": "year_quarter", "type": "nominal", "title": "Quarter"},
-                    {"field": "metric_label", "type": "nominal", "title": "Measure"},
-                    {"field": "inflation_rate", "type": "quantitative", "title": "Inflation Rate", "format": ".1f"}
+                    {"field": "trimmed_mean", "type": "quantitative", "title": "Trimmed Mean", "format": ".1f"}
                 ]
             }
         }
