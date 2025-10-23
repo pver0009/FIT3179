@@ -142,21 +142,21 @@ const weeklyWageAllocation = {
                     "title": "Spending Categories",
                     "scale": {
                         "range": [
-                            "#012a4a", // Dark blue - smallest amount
-                            "#013a63",
-                            "#01497c",
-                            "#014f86", 
+                            "#001220ff", // Dark blue - smallest amount
+                            "#002138ff",
+                            "#002b49ff",
+                            "#00385fff", 
+                            "#004779ff",
+                            "#005b9dff",
+                            "#0068b3ff",
                             "#2a6f97",
+                            "#106698ff",
+                            "#196383ff",
                             "#2c7da0",
                             "#468faf",
                             "#61a5c2",
                             "#89c2d9",
-                            "#a9d6e5",
-                            "#979dac",
-                            "#7d8597",
-                            "#5c677d",
-                            "#33415c",
-                            "#343a40"  // Light blue - largest amount
+                            "#a9d6e5",  // Light blue - largest amount
                         ]
                     },
                     "sort": {"field": "weekly_amount", "order": "ascending"},
