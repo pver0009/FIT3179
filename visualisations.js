@@ -522,16 +522,7 @@ const spendingComposition = {
 const costPressures = {
   "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
   "data": {
-    "values": [
-      {"category": "Insurance and financial services", "employee_pressure": "High", "pensioner_pressure": "High", "self_funded_pressure": "Medium", "primary_driver": "Mortgage interest rates"},
-      {"category": "Alcohol and tobacco", "employee_pressure": "High", "pensioner_pressure": "Very High", "self_funded_pressure": "Medium", "primary_driver": "Excise taxes"},
-      {"category": "Health", "employee_pressure": "Medium", "pensioner_pressure": "Medium", "self_funded_pressure": "High", "primary_driver": "Insurance premiums"},
-      {"category": "Education", "employee_pressure": "Medium", "pensioner_pressure": "Low", "self_funded_pressure": "Low", "primary_driver": "Tuition fees"},
-      {"category": "Housing", "employee_pressure": "Medium", "pensioner_pressure": "High", "self_funded_pressure": "Low", "primary_driver": "Rent and utilities"},
-      {"category": "Food and non-alcoholic beverages", "employee_pressure": "Medium", "pensioner_pressure": "Medium", "self_funded_pressure": "Medium", "primary_driver": "Supply chain costs"},
-      {"category": "Transport", "employee_pressure": "Low", "pensioner_pressure": "Low", "self_funded_pressure": "Low", "primary_driver": "Fuel prices"},
-      {"category": "Communication", "employee_pressure": "Low", "pensioner_pressure": "Low", "self_funded_pressure": "Low", "primary_driver": "Plan costs"}
-    ]
+    "url": "data/cost_pressures.csv"
   },
   "transform": [
     {
