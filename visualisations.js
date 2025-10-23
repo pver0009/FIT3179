@@ -268,64 +268,101 @@ const inflationTrends = {
     "title": "Inflation Trends Over Time",
     "data": {
         "url": "data/inflation_data.csv"
-        // Remove format specification since we're using standard CSV
     },
     "transform": [
         {
-            "calculate": "datetime(year(datum.year_quarter), (quarter(datum.year_quarter)-1)*3 + 1, 1)",
-            "as": "date"
+            "fold": ["all_groups_cpi", "trimmed_mean"],
+            "as": ["metric_type", "inflation_rate"]
+        },
+        {
+            "calculate": "datum.metric_type == 'all_groups_cpi' ? 'Headline CPI' : 'Trimmed Mean'",
+            "as": "metric_label"
         }
     ],
+    "params": [
+        {
+            "name": "metric_select",
+            "value": ["Headline CPI", "Trimmed Mean"],
+            "bind": {
+                "input": "select",
+                "options": ["Headline CPI", "Trimmed Mean"],
+                "name": "Show: ",
+                "select": true
+            }
+        },
+        {
+            "name": "year_range",
+            "value": [2015, 2025],
+            "bind": {
+                "input": "range",
+                "min": 2015,
+                "max": 2025,
+                "step": 1,
+                "name": "Year Range: "
+            }
+        }
+    ],
+    "transform": [
+        {
+            "calculate": "parseInt(datum.year_quarter)",
+            "as": "year"
+        },
+        {
+            "filter": "datum.year >= year_range[0] && datum.year <= year_range[1]"
+        },
+        {
+            "filter": {"param": "metric_select"}
+        }
+    ],
+    "encoding": {
+        "x": {
+            "field": "year_quarter",
+            "type": "ordinal",
+            "title": "Year Quarter",
+            "axis": {"labelAngle": -45},
+            "sort": null
+        }
+    },
     "layer": [
         {
             "mark": {
-                "type": "line", 
-                "stroke": "#e74c3c", 
+                "type": "line",
                 "strokeWidth": 3,
                 "point": true
             },
             "encoding": {
-                "x": {
-                    "field": "date",
-                    "type": "temporal",
-                    "title": "Year Quarter",
-                    "axis": {"labelAngle": -45}
-                },
                 "y": {
-                    "field": "all_groups_cpi",
+                    "field": "inflation_rate",
                     "type": "quantitative",
                     "title": "Inflation Rate (%)",
                     "scale": {"domain": [-2, 10]}
                 },
-                "tooltip": [
-                    {"field": "year_quarter", "type": "nominal", "title": "Quarter"},
-                    {"field": "all_groups_cpi", "type": "quantitative", "title": "CPI Inflation", "format": ".1f"},
-                    {"field": "trimmed_mean", "type": "quantitative", "title": "Trimmed Mean", "format": ".1f"}
-                ]
-            }
-        },
-        {
-            "mark": {
-                "type": "line", 
-                "stroke": "#3498db", 
-                "strokeWidth": 2, 
-                "strokeDash": [5, 5],
-                "point": true
-            },
-            "encoding": {
-                "x": {
-                    "field": "date",
-                    "type": "temporal",
-                    "title": "Year Quarter"
+                "color": {
+                    "field": "metric_label",
+                    "type": "nominal",
+                    "title": "Inflation Measure",
+                    "scale": {
+                        "domain": ["Headline CPI", "Trimmed Mean"],
+                        "range": ["#6f3ce7", "#1b7fc2"]
+                    },
+                    "legend": {
+                        "orient": "top",
+                        "direction": "horizontal"
+                    }
                 },
-                "y": {
-                    "field": "trimmed_mean",
-                    "type": "quantitative",
-                    "title": "Inflation Rate (%)"
+                "strokeDash": {
+                    "field": "metric_label",
+                    "type": "nominal",
+                    "scale": {
+                        "domain": ["Headline CPI", "Trimmed Mean"],
+                        "range": [[], [5, 5]]
+                    },
+                    "legend": null
                 },
                 "tooltip": [
                     {"field": "year_quarter", "type": "nominal", "title": "Quarter"},
-                    {"field": "trimmed_mean", "type": "quantitative", "title": "Trimmed Mean", "format": ".1f"}
+                    {"field": "metric_label", "type": "nominal", "title": "Measure"},
+                    {"field": "inflation_rate", "type": "quantitative", "title": "Inflation Rate", "format": ".1f"}
                 ]
             }
         }
