@@ -267,19 +267,12 @@ const inflationTrends = {
     "height": 400,
     "title": "Inflation Trends Over Time",
     "data": {
-        "url": "data/inflation_data.csv",
-        "format": {
-            "type": "dsv",
-            "delimiter": "\t"  
-        }
+        "url": "data/inflation_data.csv"
+        // Remove format specification since we're using standard CSV
     },
     "transform": [
         {
-            "calculate": "replace(datum.year_quarter, '-Q', '-')",
-            "as": "quarter_clean"
-        },
-        {
-            "calculate": "datetime(year(datum.quarter_clean), (quarter(datum.quarter_clean)-1)*3 + 1, 1)",
+            "calculate": "datetime(year(datum.year_quarter), (quarter(datum.year_quarter)-1)*3 + 1, 1)",
             "as": "date"
         }
     ],
