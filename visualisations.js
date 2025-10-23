@@ -521,10 +521,19 @@ const spendingComposition = {
 // 8. Cost Pressures Heatmap 
 const costPressures = {
   "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
-  "width": 800,
-  "height": 600,
+  "width": 600,
+  "height": 500,
   "data": {
-    "url": "data/cost_pressures.csv"
+    "values": [
+      {"category": "Insurance and financial services", "employee_pressure": "High", "pensioner_pressure": "High", "self_funded_pressure": "Medium", "primary_driver": "Mortgage interest rates"},
+      {"category": "Alcohol and tobacco", "employee_pressure": "High", "pensioner_pressure": "Very High", "self_funded_pressure": "Medium", "primary_driver": "Excise taxes"},
+      {"category": "Health", "employee_pressure": "Medium", "pensioner_pressure": "Medium", "self_funded_pressure": "High", "primary_driver": "Insurance premiums"},
+      {"category": "Education", "employee_pressure": "Medium", "pensioner_pressure": "Low", "self_funded_pressure": "Low", "primary_driver": "Tuition fees"},
+      {"category": "Housing", "employee_pressure": "Medium", "pensioner_pressure": "High", "self_funded_pressure": "Low", "primary_driver": "Rent and utilities"},
+      {"category": "Food and non-alcoholic beverages", "employee_pressure": "Medium", "pensioner_pressure": "Medium", "self_funded_pressure": "Medium", "primary_driver": "Supply chain costs"},
+      {"category": "Transport", "employee_pressure": "Low", "pensioner_pressure": "Low", "self_funded_pressure": "Low", "primary_driver": "Fuel prices"},
+      {"category": "Communication", "employee_pressure": "Low", "pensioner_pressure": "Low", "self_funded_pressure": "Low", "primary_driver": "Plan costs"}
+    ]
   },
   "transform": [
     {
@@ -661,12 +670,12 @@ const costPressures = {
   ],
   "vconcat": [
     {
-      "height": 50,
+      "height": 40,
       "mark": {
         "type": "text",
         "baseline": "middle",
         "align": "center",
-        "fontSize": 12,
+        "fontSize": 11,
         "fontWeight": "bold"
       },
       "encoding": {
@@ -746,7 +755,7 @@ const costPressures = {
           "mark": {
             "type": "text",
             "baseline": "middle",
-            "fontSize": 11,
+            "fontSize": 10,
             "fontWeight": "bold",
             "color": "white"
           },
@@ -779,7 +788,7 @@ const costPressures = {
     "view": {
       "stroke": ""
     },
-    "concat": {"spacing": 15},
+    "concat": {"spacing": 10},
     "axis": {
       "domain": false,
       "ticks": false,
@@ -791,8 +800,7 @@ const costPressures = {
       "labelColor": "#333",
       "titleColor": "#333",
       "orient": "bottom",
-      "direction": "horizontal",
-      "columns": 2
+      "direction": "horizontal"
     }
   }
 };
