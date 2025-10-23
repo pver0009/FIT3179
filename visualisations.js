@@ -521,6 +521,8 @@ const spendingComposition = {
 // 8. Cost Pressures Heatmap 
 const costPressures = {
   "$schema": "https://vega.github.io/schema/vega-lite/v6.json",
+  "width": 800,
+  "height": 600,
   "data": {
     "url": "data/cost_pressures.csv"
   },
@@ -528,6 +530,10 @@ const costPressures = {
     {
       "fold": ["employee_pressure", "pensioner_pressure", "self_funded_pressure"],
       "as": ["pressure_type", "pressure_level"]
+    },
+    {
+      "calculate": "if(datum.pressure_type === 'employee_pressure', 'Employee', if(datum.pressure_type === 'pensioner_pressure', 'Pensioner', 'Self-Funded'))",
+      "as": "pressure_type_label"
     },
     {
       "aggregate": [
@@ -538,7 +544,8 @@ const costPressures = {
       ],
       "groupby": [
         "category",
-        "pressure_level"
+        "pressure_level",
+        "pressure_type_label"
       ]
     },
     {
@@ -654,10 +661,13 @@ const costPressures = {
   ],
   "vconcat": [
     {
+      "height": 50,
       "mark": {
         "type": "text",
         "baseline": "middle",
-        "align": "center"
+        "align": "center",
+        "fontSize": 12,
+        "fontWeight": "bold"
       },
       "encoding": {
         "x": {
@@ -693,34 +703,41 @@ const costPressures = {
             "x2": {"field": "nx2"},
             "y": {
               "field": "ny",
-              "type": "quantitative"
+              "type": "quantitative",
+              "axis": {
+                "title": "Pressure Type"
+              }
             },
             "y2": {"field": "ny2"},
             "color": {
               "field": "pressure_level",
               "type": "nominal",
               "scale": {
-                "domain": ["Very High", "High", "Medium", "Low"],
-                "range": ["#6247AA", "#815AC0", "#B185DB", "#D2B7E5"]
+                "domain": ["Low", "Medium", "High", "Very High"],
+                "range": ["#D2B7E5", "#B185DB", "#815AC0", "#6247AA"]
               },
               "legend": {
                 "title": "Pressure Level",
-                "orient": "bottom"
+                "orient": "bottom",
+                "titleFontSize": 12,
+                "labelFontSize": 11
               }
             },
             "tooltip": [
               {
                 "field": "category",
-                "type": "nominal"
+                "type": "nominal",
+                "title": "Category"
               },
               {
-                "field": "pressure_type",
+                "field": "pressure_type_label",
                 "type": "nominal",
                 "title": "Pressure Type"
               },
               {
                 "field": "pressure_level",
-                "type": "nominal"
+                "type": "nominal",
+                "title": "Pressure Level"
               }
             ]
           }
@@ -729,7 +746,9 @@ const costPressures = {
           "mark": {
             "type": "text",
             "baseline": "middle",
-            "fontSize": 10
+            "fontSize": 11,
+            "fontWeight": "bold",
+            "color": "white"
           },
           "encoding": {
             "x": {
@@ -740,12 +759,10 @@ const costPressures = {
             "y": {
               "field": "yc",
               "type": "quantitative",
-              "axis": {
-                "title": "Pressure Type"
-              }
+              "axis": null
             },
             "text": {
-              "field": "pressure_type",
+              "field": "pressure_type_label",
               "type": "nominal"
             }
           }
@@ -762,12 +779,20 @@ const costPressures = {
     "view": {
       "stroke": ""
     },
-    "concat": {"spacing": 10},
+    "concat": {"spacing": 15},
     "axis": {
       "domain": false,
       "ticks": false,
       "labels": false,
-      "grid": false
+      "grid": false,
+      "titleFontSize": 12
+    },
+    "legend": {
+      "labelColor": "#333",
+      "titleColor": "#333",
+      "orient": "bottom",
+      "direction": "horizontal",
+      "columns": 2
     }
   }
 };
